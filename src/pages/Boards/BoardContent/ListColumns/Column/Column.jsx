@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Typography from '@mui/material/Typography'
 import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
@@ -23,9 +22,28 @@ import { CSS } from '@dnd-kit/utilities'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
 import { useConfirm } from 'material-ui-confirm'
+import {
+  createNewCardAPI,
+  deleteColumnDetailsAPI,
+  updateColumnDetailsAPI
+} from '~/apis'
+import { useSelector, useDispatch } from 'react-redux'
+import {
+  updateCurrentActiveBoard,
+  selectCurrentActiveBoard
+} from '~/redux/activeBoard/activeBoardSlice'
+import { cloneDeep } from 'lodash'
+import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
 
-function Column({ column, createNewCard, deleteColumnDetails }) {
-  const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({
+function Column({ column }) {
+  const {
+    attributes,
+    listeners,
+    setNodeRef,
+    transform,
+    transition,
+    isDragging
+  } = useSortable({
     id: column._id,
     data: { ...column }
   })
@@ -53,7 +71,10 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
 
   const [newCardTitle, setNewCardTitle] = useState('')
 
-  const addNewCard = () => {
+  const board = useSelector(selectCurrentActiveBoard)
+  const dispatch = useDispatch()
+
+  const addNewCard = async () => {
     if (!newCardTitle) {
       toast.error('Please enter Card Title!', { position: 'bottom-right' })
       return
@@ -65,13 +86,30 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       columnId: column._id
     }
 
-    /**
-     * Gọi lên props function createNewCard nằm ở component cha cao nhất (boards/_id.jsx)
-     * Lưu ý: Về sau ở học phần MERN Stack Advance nâng cao học trực tiếp mình sẽ với mình thì chúng ta sẽ đưa dữ liệu Board ra ngoài Redux Global Store,
-     * và lúc này chúng ta có thể gọi luôn API ở đây là xong thay vì phải lần lượt gọi ngược lên những component cha phía bên trên. (Đối với component con nằm càng sâu thì càng khổ :D)
-     * - Với việc sử dụng Redux như vậy thì code sẽ Clean chuẩn chỉnh hơn rất nhiều.
-     */
-    createNewCard(newCardData)
+    const createdCard = await createNewCardAPI({
+      ...newCardData,
+      boardId: board._id
+    })
+
+    // Cập nhật state board
+    // Phía Front-end chúng ta phải tự làm đúng lại state data board (thay vì phải gọi lại api fetchBoardDetailsAPI)
+    // Lưu ý: cách làm này phụ thuộc vào tùy lựa chọn và đặc thù dự án, có nơi thì BE sẽ hỗ trợ trả về luôn toàn bộ Board dù đây có là api tạo Column hay Card đi chăng nữa. => Lúc này FE sẽ nhàn hơn.
+    const newBoard = cloneDeep(board)
+    const columnToUpdate = newBoard.columns.find(
+      (column) => column._id === createdCard.columnId
+    )
+    if (columnToUpdate) {
+      // Nếu column rỗng: bản chất là đang chứa một cái Placeholder card (Nhớ lại video 37.2, hiện tại là video 69)
+      if (columnToUpdate.cards.some((card) => card.FE_PlaceholderCard)) {
+        columnToUpdate.cards = [createdCard]
+        columnToUpdate.cardOrderIds = [createdCard._id]
+      } else {
+        // Ngược lại Column đã có data thì push vào cuối mảng
+        columnToUpdate.cards.push(createdCard)
+        columnToUpdate.cardOrderIds.push(createdCard._id)
+      }
+    }
+    dispatch(updateCurrentActiveBoard(newBoard))
 
     // Đóng trạng thái thêm Card mới & Clear Input
     toggleOpenNewCardForm()
@@ -83,7 +121,8 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
   const handleDeleteColumn = () => {
     confirmDeleteColumn({
       title: 'Delete Column?',
-      description: 'This action will permanently delete your Column and its Cards! Are you sure?',
+      description:
+        'This action will permanently delete your Column and its Cards! Are you sure?',
       confirmationText: 'Confirm',
       cancellationText: 'Cancel'
       // buttonOrder: ['confirm', 'cancel']
@@ -94,15 +133,31 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
       // confirmationButtonProps: { color: 'success', variant: 'outlined' },
       // description: 'Phải nhập chữ trungquandev thì mới được Confirm =))',
       // confirmationKeyword: 'trungquandev'
-    }).then(() => {
-      /**
-       * Gọi lên props function deleteColumnDetails nằm ở component cha cao nhất (boards/_id.jsx)
-       * Lưu ý: Về sau ở học phần MERN Stack Advance nâng cao học trực tiếp mình sẽ với mình thì chúng ta sẽ đưa dữ liệu Board ra ngoài Redux Global Store,
-       * và lúc này chúng ta có thể gọi luôn API ở đây là xong thay vì phải lần lượt gọi ngược lên những component cha phía bên trên. (Đối với component con nằm càng sâu thì càng khổ :D)
-       * - Với việc sử dụng Redux như vậy thì code sẽ Clean chuẩn chỉnh hơn rất nhiều.
-       */
-      deleteColumnDetails(column._id)
-    }).catch(() => {})
+    })
+      .then(() => {
+        // Update cho chuẩn dữ liệu state Board
+        const newBoard = cloneDeep(board)
+        newBoard.columns = newBoard.columns.filter((c) => c._id !== column._id)
+        newBoard.columnOrderIds = newBoard.columnOrderIds.filter(
+          (_id) => _id !== column._id
+        )
+        dispatch(updateCurrentActiveBoard(newBoard))
+
+        // Gọi API xử lý phía BE
+        deleteColumnDetailsAPI(column._id).then((res) => {
+          toast.success(res?.deleteResult)
+        })
+      })
+      .catch(() => {})
+  }
+
+  const onUpdateColumnTitle = (newTitle) => {
+    updateColumnDetailsAPI(column._id, { title: newTitle }).then(() => {
+      const newBoard = cloneDeep(board)
+      const columnToUpdate = newBoard.columns.find((c) => c._id === column._id)
+      if (columnToUpdate) columnToUpdate.title = newTitle
+      dispatch(updateCurrentActiveBoard(newBoard))
+    })
   }
 
   // Phải bọc div ở đây vì vấn đề chiều cao của column khi kéo thả sẽ có bug kiểu kiểu flickering (video 32)
@@ -113,28 +168,40 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
         sx={{
           minWidth: '300px',
           maxWidth: '300px',
-          bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : '#ebecf0'),
+          bgcolor: (theme) =>
+            theme.palette.mode === 'dark' ? '#333643' : '#ebecf0',
           ml: 2,
           borderRadius: '6px',
           height: 'fit-content',
-          maxHeight: (theme) => `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
+          maxHeight: (theme) =>
+            `calc(${theme.trello.boardContentHeight} - ${theme.spacing(5)})`
         }}
       >
         {/* Box Column Header */}
-        <Box sx={{
-          height: (theme) => theme.trello.columnHeaderHeight,
-          p: 2,
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'space-between'
-        }}>
-          <Typography variant="h6" sx={{
-            fontSize: '1rem',
-            fontWeight: 'bold',
-            cursor: 'pointer'
-          }}>
+        <Box
+          sx={{
+            height: (theme) => theme.trello.columnHeaderHeight,
+            p: 2,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'space-between'
+          }}
+        >
+          {/* <Typography
+            variant="h6"
+            sx={{
+              fontSize: '1rem',
+              fontWeight: 'bold',
+              cursor: 'pointer'
+            }}
+          >
             {column?.title}
-          </Typography>
+          </Typography> */}
+          <ToggleFocusInput
+            value={column?.title}
+            onChangedValue={onUpdateColumnTitle}
+            data-no-dnd="true"
+          />
           <Box>
             <Tooltip title="More options">
               <ExpandMoreIcon
@@ -165,19 +232,27 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
                   }
                 }}
               >
-                <ListItemIcon><AddCardIcon className="add-card-icon" fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <AddCardIcon className="add-card-icon" fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Add new card</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentCut fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentCut fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Cut</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentCopy fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentCopy fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Copy</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><ContentPaste fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <ContentPaste fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Paste</ListItemText>
               </MenuItem>
               <Divider />
@@ -190,11 +265,18 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
                   }
                 }}
               >
-                <ListItemIcon><DeleteForeverIcon className="delete-forever-icon" fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <DeleteForeverIcon
+                    className="delete-forever-icon"
+                    fontSize="small"
+                  />
+                </ListItemIcon>
                 <ListItemText>Delete this column</ListItemText>
               </MenuItem>
               <MenuItem>
-                <ListItemIcon><Cloud fontSize="small" /></ListItemIcon>
+                <ListItemIcon>
+                  <Cloud fontSize="small" />
+                </ListItemIcon>
                 <ListItemText>Archive this column</ListItemText>
               </MenuItem>
             </Menu>
@@ -205,28 +287,40 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
         <ListCards cards={orderedCards} />
 
         {/* Box Column Footer */}
-        <Box sx={{
-          height: (theme) => theme.trello.columnFooterHeight,
-          p: 2
-        }}>
-          {!openNewCardForm
-            ? <Box sx={{
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              <Button startIcon={<AddCardIcon />} onClick={toggleOpenNewCardForm}>Add new card</Button>
+        <Box
+          sx={{
+            height: (theme) => theme.trello.columnFooterHeight,
+            p: 2
+          }}
+        >
+          {!openNewCardForm ? (
+            <Box
+              sx={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'space-between'
+              }}
+            >
+              <Button
+                startIcon={<AddCardIcon />}
+                onClick={toggleOpenNewCardForm}
+              >
+                Add new card
+              </Button>
               <Tooltip title="Drag to move">
                 <DragHandleIcon sx={{ cursor: 'pointer' }} />
               </Tooltip>
             </Box>
-            : <Box sx={{
-              height: '100%',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 1
-            }}>
+          ) : (
+            <Box
+              sx={{
+                height: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                gap: 1
+              }}
+            >
               <TextField
                 label="Enter card title..."
                 type="text"
@@ -240,13 +334,22 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
                   '& label': { color: 'text.primary' },
                   '& input': {
                     color: (theme) => theme.palette.primary.main,
-                    bgcolor: (theme) => (theme.palette.mode === 'dark' ? '#333643' : 'white')
+                    bgcolor: (theme) =>
+                      theme.palette.mode === 'dark' ? '#333643' : 'white'
                   },
-                  '& label.Mui-focused': { color: (theme) => theme.palette.primary.main },
+                  '& label.Mui-focused': {
+                    color: (theme) => theme.palette.primary.main
+                  },
                   '& .MuiOutlinedInput-root': {
-                    '& fieldset': { borderColor: (theme) => theme.palette.primary.main },
-                    '&:hover fieldset': { borderColor: (theme) => theme.palette.primary.main },
-                    '&.Mui-focused fieldset': { borderColor: (theme) => theme.palette.primary.main }
+                    '& fieldset': {
+                      borderColor: (theme) => theme.palette.primary.main
+                    },
+                    '&:hover fieldset': {
+                      borderColor: (theme) => theme.palette.primary.main
+                    },
+                    '&.Mui-focused fieldset': {
+                      borderColor: (theme) => theme.palette.primary.main
+                    }
                   },
                   '& .MuiOutlinedInput-input': {
                     borderRadius: 1
@@ -255,15 +358,22 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
               />
               <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
                 <Button
+                  className="interceptor-loading"
                   onClick={addNewCard}
-                  variant="contained" color="success" size="small"
+                  variant="contained"
+                  color="success"
+                  size="small"
                   sx={{
                     boxShadow: 'none',
                     border: '0.5px solid',
                     borderColor: (theme) => theme.palette.success.main,
-                    '&:hover': { bgcolor: (theme) => theme.palette.success.main }
+                    '&:hover': {
+                      bgcolor: (theme) => theme.palette.success.main
+                    }
                   }}
-                >Add</Button>
+                >
+                  Add
+                </Button>
                 <CloseIcon
                   fontSize="small"
                   sx={{
@@ -274,7 +384,7 @@ function Column({ column, createNewCard, deleteColumnDetails }) {
                 />
               </Box>
             </Box>
-          }
+          )}
         </Box>
       </Box>
     </div>
