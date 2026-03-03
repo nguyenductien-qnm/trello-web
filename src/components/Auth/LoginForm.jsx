@@ -1,11 +1,10 @@
 import { Link } from 'react-router-dom'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import LockIcon from '@mui/icons-material/Lock'
 import Typography from '@mui/material/Typography'
 import { Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+import TrelloIcon from '~/assets/trello.svg?react'
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
@@ -23,6 +22,7 @@ import { useSearchParams, useNavigate } from 'react-router-dom'
 import { toast } from 'react-toastify'
 import { loginUserApi } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
+import Box from '@mui/material/Box'
 
 function LoginForm() {
   const {

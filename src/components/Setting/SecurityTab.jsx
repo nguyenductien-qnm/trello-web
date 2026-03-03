@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -19,6 +18,7 @@ import { useConfirm } from 'material-ui-confirm'
 import { toast } from 'react-toastify'
 import { updateUserAPI, loginUserApi } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
+import Box from '@mui/material/Box'
 
 function SecurityTab() {
   const {

@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
@@ -9,6 +8,7 @@ import CheckCircleIcon from '@mui/icons-material/CheckCircle'
 import { useSelector } from 'react-redux'
 import { selectCurrentActiveBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { CARD_MEMBER_ACTIONS } from '~/utils/constants'
+import Box from '@mui/material/Box'
 
 function CardUserGroup({ cardMemberIds = [], onUpdateCardMembers }) {
   const [anchorPopoverElement, setAnchorPopoverElement] = useState(null)

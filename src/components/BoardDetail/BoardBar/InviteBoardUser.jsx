@@ -1,5 +1,4 @@
 import { useState } from 'react'
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
@@ -15,6 +14,7 @@ import {
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { inviteUserToBoardAPI } from '~/apis'
 import { socketIoInstance } from '~/socketClient'
+import Box from '@mui/material/Box'
 
 function InviteBoardUser({ boardId }) {
   /**

@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
@@ -17,6 +16,7 @@ import { selectCurrentUser, updateUserAPI } from '~/redux/user/userSlice'
 import { useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import VisuallyHiddenInput from '~/components/Form/VisuallyHiddenInput'
+import Box from '@mui/material/Box'
 
 function AccountTab() {
   const dispatch = useDispatch()

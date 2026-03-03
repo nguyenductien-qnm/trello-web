@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Box from '@mui/material/Box'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
@@ -18,6 +17,7 @@ import {
 } from '~/redux/activeBoard/activeBoardSlice'
 import { cloneDeep } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
+import Box from '@mui/material/Box'
 
 function ListColumns({ columns }) {
   const [openNewColumnForm, setOpenNewColumnForm] = useState(false)

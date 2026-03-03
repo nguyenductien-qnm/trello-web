@@ -1,5 +1,4 @@
 import React from 'react'
-import Box from '@mui/material/Box'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
 import Divider from '@mui/material/Divider'
@@ -15,6 +14,7 @@ import { selectCurrentUser } from '~/redux/user/userSlice'
 import { useConfirm } from 'material-ui-confirm'
 import { logoutUserApi } from '~/redux/user/userSlice'
 import { Link } from 'react-router-dom'
+import Box from '@mui/material/Box'
 
 function Profiles() {
   const [anchorEl, setAnchorEl] = React.useState(null)

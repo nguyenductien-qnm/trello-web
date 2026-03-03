@@ -1,9 +1,5 @@
-import { useState } from 'react'
-import Box from '@mui/material/Box'
+import { useEffect } from 'react'
 import Modal from '@mui/material/Modal'
-import Typography from '@mui/material/Typography'
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
-import CancelIcon from '@mui/icons-material/Cancel'
 import { useForm, Controller } from 'react-hook-form'
 import TextField from '@mui/material/TextField'
 import InputAdornment from '@mui/material/InputAdornment'
@@ -16,37 +12,16 @@ import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
 import { createNewBoardsAPI } from '~/apis'
+import { Fade } from '@mui/material'
+import Backdrop from '@mui/material/Backdrop'
+import Box from '@mui/material/Box'
 
-import { styled } from '@mui/material/styles'
-const SidebarItem = styled(Box)(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: '8px',
-  cursor: 'pointer',
-  backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
-  padding: '12px 16px',
-  borderRadius: '8px',
-  '&:hover': {
-    backgroundColor:
-      theme.palette.mode === 'dark' ? '#33485D' : theme.palette.grey[300]
-  },
-  '&.active': {
-    color: theme.palette.mode === 'dark' ? '#90caf9' : '#0c66e4',
-    backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#e9f2ff'
-  }
-}))
-
-// BOARD_TYPES tương tự bên model phía Back-end (nếu cần dùng nhiều nơi thì hãy đưa ra file constants, không thì cứ để ở đây)
 const BOARD_TYPES = {
   PUBLIC: 'public',
   PRIVATE: 'private'
 }
 
-/**
- * Bản chất của cái component SidebarCreateBoardModal này chúng ta sẽ trả về một cái SidebarItem để hiển thị ở màn Board List cho phù hợp giao diện bên đó, đồng thời nó cũng chứa thêm một cái Modal để xử lý riêng form create board nhé.
- * Note: Modal là một low-component mà bọn MUI sử dụng bên trong những thứ như Dialog, Drawer, Menu, Popover. Ở đây dĩ nhiên chúng ta có thể sử dụng Dialog cũng không thành vấn đề gì, nhưng sẽ sử dụng Modal để dễ linh hoạt tùy biến giao diện từ con số 0 cho phù hợp với mọi nhu cầu nhé.
- */
-function SidebarCreateBoardModal({ onCreatedBoard }) {
+function CreateBoardModal({ ui, handler }) {
   const {
     control,
     register,
@@ -55,35 +30,34 @@ function SidebarCreateBoardModal({ onCreatedBoard }) {
     formState: { errors }
   } = useForm()
 
-  const [isOpen, setIsOpen] = useState(false)
-  const handleOpenModal = () => setIsOpen(true)
-  const handleCloseModal = () => {
-    setIsOpen(false)
-    // Reset lại toàn bộ form khi đóng Modal
+  const { handleClose } = handler
+
+  const { isOpen } = ui
+
+  useEffect(() => {
     reset()
-  }
+  }, [isOpen, reset])
 
   const submitCreateNewBoard = (data) => {
     createNewBoardsAPI(data).then(() => {
-      handleCloseModal()
-      onCreatedBoard()
+      handleClose()
     })
   }
 
-  // <>...</> nhắc lại cho bạn anof chưa biết hoặc quên nhé: nó là React Fragment, dùng để bọc các phần tử lại mà không cần chỉ định DOM Node cụ thể nào cả.
-  return (
-    <>
-      <SidebarItem onClick={handleOpenModal}>
-        <LibraryAddIcon fontSize="small" />
-        Create a new board
-      </SidebarItem>
+  const modalConfig = {
+    'aria-labelledby': 'modal-modal-title',
+    closeAfterTransition: true,
+    slots: { backdrop: Backdrop },
+    slotProps: {
+      backdrop: {
+        timeout: 500
+      }
+    }
+  }
 
-      <Modal
-        open={isOpen}
-        // onClose={handleCloseModal} // chỉ sử dụng onClose trong trường hợp muốn đóng Modal bằng nút ESC hoặc click ra ngoài Modal
-        aria-labelledby="modal-modal-title"
-        aria-describedby="modal-modal-description"
-      >
+  return (
+    <Modal open={isOpen} onClose={handleClose} {...modalConfig}>
+      <Fade in={isOpen}>
         <Box
           sx={{
             position: 'absolute',
@@ -101,30 +75,6 @@ function SidebarCreateBoardModal({ onCreatedBoard }) {
               theme.palette.mode === 'dark' ? '#1A2027' : 'white'
           }}
         >
-          <Box
-            sx={{
-              position: 'absolute',
-              top: '10px',
-              right: '10px',
-              cursor: 'pointer'
-            }}
-          >
-            <CancelIcon
-              color="error"
-              sx={{ '&:hover': { color: 'error.light' } }}
-              onClick={handleCloseModal}
-            />
-          </Box>
-          <Box
-            id="modal-modal-title"
-            sx={{ display: 'flex', alignItems: 'center', gap: 1 }}
-          >
-            <LibraryAddIcon />
-            <Typography variant="h6" component="h2">
-              {' '}
-              Create a new board
-            </Typography>
-          </Box>
           <Box id="modal-modal-description" sx={{ my: 2 }}>
             <form onSubmit={handleSubmit(submitCreateNewBoard)}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
@@ -187,11 +137,6 @@ function SidebarCreateBoardModal({ onCreatedBoard }) {
                   <FieldErrorAlert errors={errors} fieldName={'description'} />
                 </Box>
 
-                {/*
-                 * Lưu ý đối với RadioGroup của MUI thì không thể dùng register tương tự TextField được mà phải sử dụng <Controller /> và props "control" của react-hook-form như cách làm dưới đây
-                 * https://stackoverflow.com/a/73336103/8324172
-                 * https://mui.com/material-ui/react-radio-button/
-                 */}
                 <Controller
                   name="type"
                   defaultValue={BOARD_TYPES.PUBLIC}
@@ -233,9 +178,8 @@ function SidebarCreateBoardModal({ onCreatedBoard }) {
             </form>
           </Box>
         </Box>
-      </Modal>
-    </>
+      </Fade>
+    </Modal>
   )
 }
-
-export default SidebarCreateBoardModal
+export default CreateBoardModal

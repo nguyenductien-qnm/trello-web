@@ -1,11 +1,11 @@
-import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Button from '@mui/material/Button'
 import HomeIcon from '@mui/icons-material/Home'
 import SvgIcon from '@mui/material/SvgIcon'
-import { ReactComponent as PlanetSvg } from '~/assets/404/planet.svg'
-import { ReactComponent as AstronautSvg } from '~/assets/404/astronaut.svg'
+import PlanetSvg from '~/assets/404/planet.svg?react'
+import AstronautSvg from '~/assets/404/astronaut.svg?react'
 import { Link } from 'react-router-dom'
+import Box from '@mui/material/Box'
 
 function NotFound() {
   return (

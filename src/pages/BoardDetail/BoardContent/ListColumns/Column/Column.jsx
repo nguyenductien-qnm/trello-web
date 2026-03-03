@@ -1,6 +1,5 @@
 import { useState } from 'react'
 import { toast } from 'react-toastify'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Menu from '@mui/material/Menu'
 import MenuItem from '@mui/material/MenuItem'
@@ -34,6 +33,7 @@ import {
 } from '~/redux/activeBoard/activeBoardSlice'
 import { cloneDeep } from 'lodash'
 import ToggleFocusInput from '~/components/Form/ToggleFocusInput'
+import Box from '@mui/material/Box'
 
 function Column({ column }) {
   const {

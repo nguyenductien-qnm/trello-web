@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Chip from '@mui/material/Chip'
 import DashboardIcon from '@mui/icons-material/Dashboard'
 import VpnLockIcon from '@mui/icons-material/VpnLock'
@@ -22,6 +21,7 @@ const MENU_STYLES = {
     bgcolor: 'primary.50'
   }
 }
+import Box from '@mui/material/Box'
 
 function BoardBar({ board }) {
   return (

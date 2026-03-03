@@ -1,11 +1,10 @@
 import { Link, useNavigate } from 'react-router-dom'
-import Box from '@mui/material/Box'
 import Button from '@mui/material/Button'
 import Avatar from '@mui/material/Avatar'
 import LockIcon from '@mui/icons-material/Lock'
 import Typography from '@mui/material/Typography'
 import { Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+import TrelloIcon from '~/assets/trello.svg?react'
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
@@ -21,6 +20,7 @@ import {
 import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { registerUserAPI } from '~/apis'
 import { toast } from 'react-toastify'
+import Box from '@mui/material/Box'
 
 function RegisterForm() {
   const {

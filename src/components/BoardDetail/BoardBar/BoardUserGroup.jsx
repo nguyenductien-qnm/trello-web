@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import Box from '@mui/material/Box'
 import Avatar from '@mui/material/Avatar'
 import Tooltip from '@mui/material/Tooltip'
 import Popover from '@mui/material/Popover'
+import Box from '@mui/material/Box'
 
 function BoardUserGroup({ boardUsers = [], limit = 8 }) {
   /**

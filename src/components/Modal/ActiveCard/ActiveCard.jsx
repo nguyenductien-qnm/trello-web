@@ -1,4 +1,3 @@
-import Box from '@mui/material/Box'
 import Modal from '@mui/material/Modal'
 import Typography from '@mui/material/Typography'
 import CreditCardIcon from '@mui/icons-material/CreditCard'
@@ -45,6 +44,7 @@ import { updateCardInBoard } from '~/redux/activeBoard/activeBoardSlice'
 import { updateCardDetailsAPI } from '~/apis'
 
 import { styled } from '@mui/material/styles'
+import Box from '@mui/material/Box'
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
   alignItems: 'center',

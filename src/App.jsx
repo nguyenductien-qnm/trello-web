@@ -1,5 +1,4 @@
-import Board from '~/pages/Boards/_id'
-import { BrowserRouter } from 'react-router-dom'
+import BoardPage from './pages/Board/Board.page'
 import { Route, Routes, Navigate, Outlet } from 'react-router-dom'
 import NotFound from './pages/404/NotFound'
 import Auth from './pages/Auth/Auth'
@@ -7,7 +6,7 @@ import AccountVerification from './pages/Auth/AccountVerification'
 import { useSelector } from 'react-redux'
 import { selectCurrentUser } from './redux/user/userSlice'
 import Settings from './pages/Settings/Settings'
-import Boards from './pages/Boards'
+import BoardDetail from './pages/BoardDetail/BoardDetail.page'
 /**
  * Giải pháp Clean Code trong việc xác định các route nào cần đăng nhập tài khoản xong thì mới cho truy cập
  * Sử dụng <Outlet /> của react-router-dom để hiển thị các Child Route (xem cách sử dụng trong App() bên dưới)
@@ -43,10 +42,10 @@ function App() {
         {/* <Outlet /> của react-router-dom sẽ chạy vào các child route trong này */}
 
         {/* Board details  */}
-        <Route path="/boards/:boardId" element={<Board />} />
+        <Route path="/boards/:boardId" element={<BoardDetail />} />
 
         {/* Board list  */}
-        <Route path="/boards" element={<Boards />} />
+        <Route path="/boards" element={<BoardPage />} />
 
         {/* user setting */}
         <Route path="/settings/account" element={<Settings />} />

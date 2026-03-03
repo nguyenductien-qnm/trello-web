@@ -1,7 +1,7 @@
 import { useLocation } from 'react-router-dom'
-import Box from '@mui/material/Box'
 import LoginForm from '../../components/Auth/LoginForm'
 import RegisterForm from '../../components/Auth/RegisterForm'
+import Box from '@mui/material/Box'
 
 function Auth() {
   const location = useLocation()
