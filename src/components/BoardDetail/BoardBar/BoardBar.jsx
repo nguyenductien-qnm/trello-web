@@ -4,10 +4,12 @@ import VpnLockIcon from '@mui/icons-material/VpnLock'
 import AddToDriveIcon from '@mui/icons-material/AddToDrive'
 import BoltIcon from '@mui/icons-material/Bolt'
 import FilterListIcon from '@mui/icons-material/FilterList'
-import { Tooltip } from '@mui/material'
-import { capitalizeFirstLetter } from '~/utils/formatters'
+import Tooltip from '@mui/material/Tooltip'
 import BoardUserGroup from './BoardUserGroup'
 import InviteBoardUser from './InviteBoardUser'
+import Box from '@mui/material/Box'
+import { capitalizeFirstLetter } from '~/utils/formatters'
+
 const MENU_STYLES = {
   color: 'white',
   bgcolor: 'transparent',
@@ -21,7 +23,6 @@ const MENU_STYLES = {
     bgcolor: 'primary.50'
   }
 }
-import Box from '@mui/material/Box'
 
 function BoardBar({ board }) {
   return (

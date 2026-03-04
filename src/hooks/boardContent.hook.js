@@ -1,58 +1,36 @@
-import ListColumns from './ListColumns/ListColumns'
-
 import {
-  DndContext,
-  // PointerSensor,
-  // MouseSensor,
-  // TouchSensor,
   useSensor,
   useSensors,
-  DragOverlay,
   defaultDropAnimationSideEffects,
   closestCorners,
-  // closestCenter,
   pointerWithin,
-  // rectIntersection,
   getFirstCollision
 } from '@dnd-kit/core'
 import { MouseSensor, TouchSensor } from '~/customLibraries/DndKitSensors'
-
 import { arrayMove } from '@dnd-kit/sortable'
 import { useEffect, useState, useCallback, useRef } from 'react'
 import { cloneDeep, isEmpty } from 'lodash'
 import { generatePlaceholderCard } from '~/utils/formatters'
-
-import Column from './ListColumns/Column/Column'
-import Card from './ListColumns/Column/ListCards/Card/Card'
-import Box from '@mui/material/Box'
 
 const ACTIVE_DRAG_ITEM_TYPE = {
   COLUMN: 'ACTIVE_DRAG_ITEM_TYPE_COLUMN',
   CARD: 'ACTIVE_DRAG_ITEM_TYPE_CARD'
 }
 
-function BoardContent({
+const useBoardContent = ({
   board,
   moveColumns,
   moveCardInTheSameColumn,
   moveCardToDifferentColumn
-}) {
-  // https://docs.dndkit.com/api-documentation/sensors
-  // Nếu dùng PointerSensor mặc định thì phải kết hợp thuộc tính CSS touch-action: none ở những phần tử kéo thả - nhưng mà còn bug
-  // const pointerSensor = useSensor(PointerSensor, { activationConstraint: { distance: 10 } })
-
-  // Yêu cầu chuột di chuyển 10px thì mới kích hoạt event, fix trường hợp click bị gọi event
+}) => {
   const mouseSensor = useSensor(MouseSensor, {
     activationConstraint: { distance: 10 }
   })
 
-  // Nhấn giữ 250ms và dung sai của cảm ứng 500px thì mới kích hoạt event
   const touchSensor = useSensor(TouchSensor, {
     activationConstraint: { delay: 250, tolerance: 500 }
   })
 
-  // Ưu tiên sử dụng kết hợp 2 loại sensors là mouse và touch để có trải nghiệm trên mobile tốt nhất, không bị bug.
-  // const sensors = useSensors(pointerSensor)
   const sensors = useSensors(mouseSensor, touchSensor)
 
   const [orderedColumns, setOrderedColumns] = useState([])
@@ -425,43 +403,17 @@ function BoardContent({
     [activeDragItemType, orderedColumns]
   )
 
-  return (
-    <DndContext
-      // Cảm biến (đã giải thích kỹ ở video số 30)
-      sensors={sensors}
-      // Thuật toán phát hiện va chạm (nếu không có nó thì card với cover lớn sẽ không kéo qua Column được vì lúc này nó đang bị conflict giữa card và column), chúng ta sẽ dùng closestCorners thay vì closestCenter
-      // https://docs.dndkit.com/api-documentation/context-provider/collision-detection-algorithms
-      // Update video 37: nếu chỉ dùng closestCorners sẽ có bug flickering + sai lệch dữ liệu (vui lòng xem video 37 sẽ rõ)
-      // collisionDetection={closestCorners}
-
-      // Tự custom nâng cao thuật toán phát hiện va chạm (video fix bug số 37)
-      collisionDetection={collisionDetectionStrategy}
-      onDragStart={handleDragStart}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <Box
-        sx={{
-          bgcolor: (theme) =>
-            theme.palette.mode === 'dark' ? '#34495e' : '#1976d2',
-          width: '100%',
-          height: (theme) => theme.trello.boardContentHeight,
-          p: '10px 0'
-        }}
-      >
-        <ListColumns columns={orderedColumns} />
-        <DragOverlay dropAnimation={customDropAnimation}>
-          {!activeDragItemType && null}
-          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.COLUMN && (
-            <Column column={activeDragItemData} />
-          )}
-          {activeDragItemType === ACTIVE_DRAG_ITEM_TYPE.CARD && (
-            <Card card={activeDragItemData} />
-          )}
-        </DragOverlay>
-      </Box>
-    </DndContext>
-  )
+  return {
+    sensors,
+    orderedColumns,
+    activeDragItemType,
+    activeDragItemData,
+    handleDragStart,
+    handleDragOver,
+    handleDragEnd,
+    customDropAnimation,
+    collisionDetectionStrategy
+  }
 }
 
-export default BoardContent
+export default useBoardContent

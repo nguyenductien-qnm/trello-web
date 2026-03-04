@@ -1,86 +1,24 @@
-import { useState } from 'react'
-import { toast } from 'react-toastify'
 import Column from './Column/Column'
 import Button from '@mui/material/Button'
 import NoteAddIcon from '@mui/icons-material/NoteAdd'
 import TextField from '@mui/material/TextField'
 import CloseIcon from '@mui/icons-material/Close'
+import Box from '@mui/material/Box'
+import useListColum from '~/hooks/listColumn.hook'
 import {
   SortableContext,
   horizontalListSortingStrategy
 } from '@dnd-kit/sortable'
-import { createNewColumnAPI } from '~/apis'
-import { useSelector, useDispatch } from 'react-redux'
-import {
-  updateCurrentActiveBoard,
-  selectCurrentActiveBoard
-} from '~/redux/activeBoard/activeBoardSlice'
-import { cloneDeep } from 'lodash'
-import { generatePlaceholderCard } from '~/utils/formatters'
-import Box from '@mui/material/Box'
 
 function ListColumns({ columns }) {
-  const [openNewColumnForm, setOpenNewColumnForm] = useState(false)
-  const toggleOpenNewColumnForm = () => setOpenNewColumnForm(!openNewColumnForm)
+  const {
+    openNewColumnForm,
+    toggleOpenNewColumnForm,
+    newColumnTitle,
+    setNewColumnTitle,
+    addNewColumn
+  } = useListColum()
 
-  const [newColumnTitle, setNewColumnTitle] = useState('')
-
-  const board = useSelector(selectCurrentActiveBoard)
-  const dispatch = useDispatch()
-
-  const addNewColumn = async () => {
-    if (!newColumnTitle) {
-      toast.error('Please enter Column Title!')
-      return
-    }
-
-    // Tạo dữ liệu Column để gọi API
-    const newColumnData = {
-      title: newColumnTitle
-    }
-
-    const createdColumn = await createNewColumnAPI({
-      ...newColumnData,
-      boardId: board._id
-    })
-
-    // Khi tạo column mới thì nó sẽ chưa có card, cần xử lý vấn đề kéo thả vào một column rỗng (Nhớ lại video 37.2, code hiện tại là video 69)
-    createdColumn.cards = [generatePlaceholderCard(createdColumn)]
-    createdColumn.cardOrderIds = [generatePlaceholderCard(createdColumn)._id]
-
-    // Cập nhật state board
-    // Phía Front-end chúng ta phải tự làm đúng lại state data board (thay vì phải gọi lại api fetchBoardDetailsAPI)
-    // Lưu ý: cách làm này phụ thuộc vào tùy lựa chọn và đặc thù dự án, có nơi thì BE sẽ hỗ trợ trả về luôn toàn bộ Board dù đây có là api tạo Column hay Card đi chăng nữa. => Lúc này FE sẽ nhàn hơn.
-
-    /*
-     * Đoạn này khi chỉnh sửa giá trị lấy từ redux ngoài component sẽ dính lỗi
-     *  object is not extensible bởi dù đã copy/clone ra giá trị newBoard nhưng
-     *  bản chất của spread operator là Shallow Copy/Clone, nên dính phải
-     *  rules Immutability trong Redux Toolkit không dùng được hàm PUSH
-     * (sửa giá trị mảng trực tiếp),
-     * cách đơn giản nhanh gọn nhất ở trường hợp này của chúng ta là dùng tới Deep Copy/Clone
-     * toàn bộ cái Board cho dễ hiểu và code ngắn gọn.
-     * https://redux-toolkit.js.org/usage/immer-reducers
-     * Tài liệu thêm về Shallow và Deep Copy Object trong JS:
-     * https://www.javascripttutorial.net/object/3-ways-to-copy-objects-in-javascript/
-     */
-
-    const newBoard = cloneDeep(board)
-
-    newBoard.columns.push(createdColumn)
-    newBoard.columnOrderIds.push(createdColumn._id)
-    dispatch(updateCurrentActiveBoard(newBoard))
-
-    // Đóng trạng thái thêm Column mới & Clear Input
-    toggleOpenNewColumnForm()
-    setNewColumnTitle('')
-  }
-
-  /**
-   * Thằng SortableContext yêu cầu items là một mảng dạng ['id-1', 'id-2'] chứ không phải [{id: 'id-1'}, {id: 'id-2'}]
-   * Nếu không đúng thì vẫn kéo thả được nhưng không có animation
-   * https://github.com/clauderic/dnd-kit/issues/183#issuecomment-812569512
-   */
   return (
     <SortableContext
       items={columns?.map((c) => c._id)}
