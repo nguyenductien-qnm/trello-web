@@ -2,12 +2,22 @@ import { useLocation } from 'react-router-dom'
 import LoginForm from '../../components/Auth/LoginForm'
 import RegisterForm from '../../components/Auth/RegisterForm'
 import Box from '@mui/material/Box'
+<<<<<<< HEAD
+=======
+import LoginForm from './LoginForm'
+import RegisterForm from './RegisterForm'
+import ForgotForm from './ForgotPassword'
+import ChangePassword from './ChangePassword'
+import CheckEmail from './CheckEmail'
+>>>>>>> 4340e4c (Feat(ChangePass,CheckEmail,ForgotPassWord): add ChangePass,CheckEmail,ForgotPassword page)
 
 function Auth() {
   const location = useLocation()
   const isLogin = location.pathname === '/login'
   const isRegister = location.pathname === '/register'
-
+  const isResetPassword = location.pathname === '/auth/reset-password'
+  const isChangePassword = location.pathname === '/auth/change-password'
+  const isCheckEmail = location.pathname === '/auth/check-email'
   return (
     <Box
       sx={{
@@ -25,6 +35,9 @@ function Auth() {
     >
       {isLogin && <LoginForm />}
       {isRegister && <RegisterForm />}
+      {isResetPassword && <ForgotForm />}
+      {isChangePassword && <ChangePassword />}
+      {isCheckEmail && <CheckEmail />}
     </Box>
   )
 }

@@ -70,7 +70,7 @@ function RegisterForm() {
               color: (theme) => theme.palette.grey[500]
             }}
           >
-            Author: TrungQuanDev
+            Welcome to Taskio
           </Box>
 
           <Box sx={{ padding: '0 1em 1em 1em' }}>

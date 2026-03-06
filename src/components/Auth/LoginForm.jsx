@@ -25,11 +25,7 @@ import { useDispatch } from 'react-redux'
 import Box from '@mui/material/Box'
 
 function LoginForm() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors }
-  } = useForm()
+  const { register, handleSubmit, formState: { errors } } = useForm()
 
   let [searchParams] = useSearchParams()
 
@@ -78,7 +74,7 @@ function LoginForm() {
               color: (theme) => theme.palette.grey[500]
             }}
           >
-            Author: TrungQuanDev
+            Welcome to Taskio
           </Box>
           <Box
             sx={{
@@ -172,13 +168,23 @@ function LoginForm() {
           </CardActions>
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
             <Typography>New to Trello MERN Stack Advanced?</Typography>
-            <Link to="/register" style={{ textDecoration: 'none' }}>
-              <Typography
-                sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
-              >
-                Create account!
-              </Typography>
-            </Link>
+            <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 1 }}>
+              <Link to="/auth/reset-password" style={{ textDecoration: 'none' }}>
+                <Typography
+                  sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
+                >
+                  Can't log in?
+                </Typography>
+              </Link>
+              <Typography>or</Typography>
+              <Link to="/register" style={{ textDecoration: 'none' }}>
+                <Typography
+                  sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
+                >
+                  Create account!
+                </Typography>
+              </Link>
+            </Typography>
           </Box>
         </MuiCard>
       </Zoom>

@@ -56,6 +56,9 @@ function App() {
         {/* Authentication  */}
         <Route path="/login" element={<Auth />} />
         <Route path="/register" element={<Auth />} />
+        <Route path="/auth/reset-password" element={<Auth />} />
+        <Route path="/auth/check-email" element={<Auth />} />
+        <Route path="/auth/change-password" element={<Auth />} />
         <Route path="/account/verification" element={<AccountVerification />} />
       </Route>
 
