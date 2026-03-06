@@ -14,7 +14,7 @@ export const loginUserApi = createAsyncThunk(
       `${API_ROOT}/v1/users/login`,
       data
     )
-    return response.data
+    return response.data.metadata
   }
 )
 
@@ -27,7 +27,7 @@ export const logoutUserApi = createAsyncThunk(
     if (showSuccessMessage) {
       toast.success('Logged out successfully!')
     }
-    return response.data
+    return response.data.metadata
   }
 )
 
@@ -38,7 +38,7 @@ export const updateUserAPI = createAsyncThunk(
       `${API_ROOT}/v1/users/update`,
       data
     )
-    return response.data
+    return response.data.metadata
   }
 )
 

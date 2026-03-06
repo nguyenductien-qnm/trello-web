@@ -16,7 +16,7 @@ import FieldErrorAlert from '~/components/Form/FieldErrorAlert'
 import { useForm } from 'react-hook-form'
 import { useConfirm } from 'material-ui-confirm'
 import { toast } from 'react-toastify'
-import { updateUserAPI, loginUserApi } from '~/redux/user/userSlice'
+import { updateUserAPI, logoutUserApi } from '~/redux/user/userSlice'
 import { useDispatch } from 'react-redux'
 import Box from '@mui/material/Box'
 
@@ -30,11 +30,9 @@ function SecurityTab() {
 
   const dispatch = useDispatch(useDispatch)
 
-  // Ôn lại: https://www.npmjs.com/package/material-ui-confirm
   const confirmChangePassword = useConfirm()
   const submitChangePassword = (data) => {
     confirmChangePassword({
-      // Title, Description, Content...vv của gói material-ui-confirm đều có type là ReactNode nên có thể thoải sử dụng MUI components, rất tiện lợi khi cần custom styles
       title: (
         <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
           <LogoutIcon sx={{ color: 'warning.dark' }} /> Change Password
@@ -58,11 +56,9 @@ function SecurityTab() {
           .then((res) => {
             if (!res.error) {
               toast.success('User updated successfully!')
-              dispatch(loginUserApi(false))
+              dispatch(logoutUserApi(false))
             }
           })
-
-        // Gọi API...
       })
       .catch(() => {})
   }

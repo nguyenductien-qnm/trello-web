@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
-import { fetchBoardsAPI } from '~/apis'
+import { createNewBoardsAPI, fetchBoardsAPI } from '~/apis'
 
 const useBoardList = () => {
   const [boards, setBoards] = useState(null)
@@ -22,6 +22,12 @@ const useBoardList = () => {
   const handleOpenCreateBoard = () => setIsOpenCreateBoard(true)
   const handleCloseCreateBoard = () => setIsOpenCreateBoard(false)
 
+  const handleCreateBoard = async (data) => {
+    const board = await createNewBoardsAPI(data)
+    setBoards((prev) => [board, ...prev])
+    handleCloseCreateBoard()
+  }
+
   return {
     ui: {
       board: {
@@ -39,6 +45,7 @@ const useBoardList = () => {
         handleOpenCreateBoard
       },
       createModal: {
+        handleCreateBoard,
         handleClose: handleCloseCreateBoard
       }
     }

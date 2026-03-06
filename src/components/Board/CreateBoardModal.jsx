@@ -30,19 +30,13 @@ function CreateBoardModal({ ui, handler }) {
     formState: { errors }
   } = useForm()
 
-  const { handleClose } = handler
+  const { handleClose, handleCreateBoard } = handler
 
   const { isOpen } = ui
 
   useEffect(() => {
     reset()
   }, [isOpen, reset])
-
-  const submitCreateNewBoard = (data) => {
-    createNewBoardsAPI(data).then(() => {
-      handleClose()
-    })
-  }
 
   const modalConfig = {
     'aria-labelledby': 'modal-modal-title',
@@ -76,7 +70,7 @@ function CreateBoardModal({ ui, handler }) {
           }}
         >
           <Box id="modal-modal-description" sx={{ my: 2 }}>
-            <form onSubmit={handleSubmit(submitCreateNewBoard)}>
+            <form onSubmit={handleSubmit(handleCreateBoard)}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Box>
                   <TextField

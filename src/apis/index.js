@@ -2,20 +2,12 @@ import authorizeAxiosInstance from '~/utils/authorizeAxios'
 import { API_ROOT } from '~/utils/constants'
 import { toast } from 'react-toastify'
 
-/** Boards */
-// đã di chuyển sang Redux
-// export const fetchBoardDetailsAPI = async (boardId) => {
-//   const response = await axios.get(`${API_ROOT}/v1/boards/${boardId}`)
-//   // Lưu ý: axios sẽ trả kết quả về qua property của nó là data
-//   return response.data
-// }
-
 export const updateBoardDetailsAPI = async (boardId, updateData) => {
   const response = await authorizeAxiosInstance.put(
     `${API_ROOT}/v1/boards/${boardId}`,
     updateData
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const moveCardToDifferentColumnAPI = async (updateData) => {
@@ -23,7 +15,7 @@ export const moveCardToDifferentColumnAPI = async (updateData) => {
     `${API_ROOT}/v1/boards/supports/moving_card`,
     updateData
   )
-  return response.data
+  return response.data.metadata
 }
 
 /** Columns */
@@ -32,7 +24,7 @@ export const createNewColumnAPI = async (newColumnData) => {
     `${API_ROOT}/v1/columns`,
     newColumnData
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const updateColumnDetailsAPI = async (columnId, updateData) => {
@@ -40,14 +32,14 @@ export const updateColumnDetailsAPI = async (columnId, updateData) => {
     `${API_ROOT}/v1/columns/${columnId}`,
     updateData
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const deleteColumnDetailsAPI = async (columnId) => {
   const response = await authorizeAxiosInstance.delete(
     `${API_ROOT}/v1/columns/${columnId}`
   )
-  return response.data
+  return response.data.metadata
 }
 
 /** Cards */
@@ -56,7 +48,7 @@ export const createNewCardAPI = async (newCardData) => {
     `${API_ROOT}/v1/cards`,
     newCardData
   )
-  return response.data
+  return response.data.metadata
 }
 
 /** Users */
@@ -68,7 +60,7 @@ export const registerUserAPI = async (data) => {
   toast.success(
     'Account created successfully! Please check and verify your account before logging in!'
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const verifyUserAPI = async (data) => {
@@ -79,21 +71,21 @@ export const verifyUserAPI = async (data) => {
   toast.success(
     'Account verified successfully! Now you can login to enjoy our services! Have a good day!'
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const refreshTokenAPI = async () => {
   const response = await authorizeAxiosInstance.put(
     `${API_ROOT}/v1/users/refresh_token`
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const fetchBoardsAPI = async (searchPath) => {
   const response = await authorizeAxiosInstance.get(
     `${API_ROOT}/v1/boards${searchPath}`
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const createNewBoardsAPI = async (data) => {
@@ -102,7 +94,7 @@ export const createNewBoardsAPI = async (data) => {
     data
   )
   toast.success('Broad created successfully!')
-  return response.data
+  return response.data.metadata
 }
 
 export const updateCardDetailsAPI = async (cardId, updateData) => {
@@ -110,7 +102,7 @@ export const updateCardDetailsAPI = async (cardId, updateData) => {
     `${API_ROOT}/v1/cards/${cardId}`,
     updateData
   )
-  return response.data
+  return response.data.metadata
 }
 
 export const inviteUserToBoardAPI = async (data) => {

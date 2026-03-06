@@ -12,7 +12,7 @@ export const fetchInvitationsAPI = createAsyncThunk(
     const response = await authorizeAxiosInstance.get(
       `${API_ROOT}/v1/invitations`
     )
-    return response.data
+    return response.data.metadata
   }
 )
 
@@ -23,7 +23,7 @@ export const updateBoardInvitationAPI = createAsyncThunk(
       `${API_ROOT}/v1/invitations/board/${invitationId}`,
       { status }
     )
-    return response.data
+    return response.data.metadata
   }
 )
 
