@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom"
-import { Avatar, Box, Button, CardActions, TextField, Typography, Zoom } from "@mui/material"
-import { Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+
+import { Avatar } from "@mui/material"
+import { Button } from "@mui/material"
+import { CardActions } from "@mui/material"
+import { TextField } from "@mui/material"
+import { Typography } from "@mui/material"
+import { Zoom } from "@mui/material"
+
+import { Card as MuiCard } from "@mui/material"
+
+import trelloLogo from "~/assets/trello.svg"
+import { Box } from "@mui/material"
 function ForgotForm() {
     return (
         <form>
@@ -16,8 +25,8 @@ function ForgotForm() {
                         }}
                     >
                         <Avatar sx={{ bgcolor: 'primary.main' }}>
-                            <TrelloIcon />
-                        </Avatar>
+  <img src={trelloLogo} alt="Trello" style={{ width: '70%', height: '70%' }} />
+</Avatar>
                     </Box>
                     <Box
                         sx={{
@@ -33,7 +42,7 @@ function ForgotForm() {
                     </Box>
 
                     <Box sx={{ padding: '0 1em 1em 1em' }}>
-                        <Typography sx={{ marginTop: '1em', fontSize: '0.8rem'}}>
+                        <Typography sx={{ marginTop: '1em', fontSize: '0.8rem' }}>
                             We'll send a recovery link to
                         </Typography>
                         <Box sx={{ marginTop: '1em' }}>
@@ -45,6 +54,7 @@ function ForgotForm() {
                             />
                         </Box>
                     </Box>
+
                     <CardActions sx={{ padding: '0 1em 1em 1em' }}>
                         <Button
                             className="interceptor-loading"
@@ -58,16 +68,16 @@ function ForgotForm() {
                             Send recovery link
                         </Button>
                     </CardActions>
+
                     <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
-                        <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 1 }}>
-                            <Link to="/login" style={{ textDecoration: 'none' }}>
-                                <Typography
-                                    sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
-                                >
-                                    Return to login
-                                </Typography>
-                            </Link>
-                        </Typography>
+                        <Link to="/auth/login" style={{ textDecoration: 'none' }}>
+                            <Typography
+                                component="span"
+                                sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
+                            >
+                                Return to login
+                            </Typography>
+                        </Link>
                     </Box>
                 </MuiCard>
             </Zoom>

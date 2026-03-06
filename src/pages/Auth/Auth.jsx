@@ -1,15 +1,15 @@
 import { useLocation } from 'react-router-dom'
 import Box from '@mui/material/Box'
-import LoginForm from './LoginForm'
-import RegisterForm from './RegisterForm'
-import ForgotForm from './ForgotPassword'
-import ChangePassword from './ChangePassword'
-import CheckEmail from './CheckEmail'
+import LoginForm from '~/components/Auth/LoginForm'
+import RegisterForm from '~/components/Auth/RegisterForm'
+import ForgotForm from '../../components/Auth/ForgotPassword'
+import ChangePassword from '../../components/Auth/ChangePassword'
+import CheckEmail from '../../components/Auth/CheckEmail'
 
 function Auth() {
   const location = useLocation()
-  const isLogin = location.pathname === '/login'
-  const isRegister = location.pathname === '/register'
+  const isLogin = location.pathname === '/auth/login'
+  const isRegister = location.pathname === '/auth/register'
   const isResetPassword = location.pathname === '/auth/reset-password'
   const isChangePassword = location.pathname === '/auth/change-password'
   const isCheckEmail = location.pathname === '/auth/check-email'

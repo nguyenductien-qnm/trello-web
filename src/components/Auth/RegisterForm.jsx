@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import LockIcon from '@mui/icons-material/Lock'
 import Typography from '@mui/material/Typography'
 import { Card as MuiCard } from '@mui/material'
-import TrelloIcon from '~/assets/trello.svg?react'
+import trelloLogo from "~/assets/trello.svg"
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
@@ -59,7 +59,7 @@ function RegisterForm() {
               <LockIcon />
             </Avatar>
             <Avatar sx={{ bgcolor: 'primary.main' }}>
-              <TrelloIcon />
+              <img src={trelloLogo} alt="Trello" style={{ width: '70%', height: '70%' }} />
             </Avatar>
           </Box>
           <Box
@@ -143,7 +143,7 @@ function RegisterForm() {
           </CardActions>
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
             <Typography>Already have an account?</Typography>
-            <Link to="/login" style={{ textDecoration: 'none' }}>
+            <Link to="/auth/login" style={{ textDecoration: 'none' }}>
               <Typography
                 sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
               >

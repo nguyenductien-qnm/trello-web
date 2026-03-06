@@ -15,7 +15,7 @@ import BoardDetail from './pages/BoardDetail/BoardDetail.page'
  * https://www.robinwieruch.de/react-router-private-routes/
  */
 const ProtectedRoute = ({ user }) => {
-  if (!user) return <Navigate to="/login" replace={true} />
+  if (!user) return <Navigate to="/auth/login" replace={true} />
   return <Outlet />
 }
 
@@ -54,8 +54,8 @@ function App() {
 
       <Route element={<UnauthorizedRoute user={currentUser} />}>
         {/* Authentication  */}
-        <Route path="/login" element={<Auth />} />
-        <Route path="/register" element={<Auth />} />
+        <Route path="/auth/login" element={<Auth />} />
+        <Route path="/auth/register" element={<Auth />} />
         <Route path="/auth/reset-password" element={<Auth />} />
         <Route path="/auth/check-email" element={<Auth />} />
         <Route path="/auth/change-password" element={<Auth />} />

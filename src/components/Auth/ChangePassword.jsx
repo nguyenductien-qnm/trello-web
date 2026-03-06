@@ -1,7 +1,16 @@
 import { Link } from "react-router-dom"
-import { Avatar, Box, Button, CardActions, TextField, Typography, Zoom } from "@mui/material"
-import { Card as MuiCard } from '@mui/material'
-import { ReactComponent as TrelloIcon } from '~/assets/trello.svg'
+
+import { Avatar } from "@mui/material"
+import { Button } from "@mui/material"
+import { CardActions } from "@mui/material"
+import { TextField } from "@mui/material"
+import { Typography } from "@mui/material"
+import { Zoom } from "@mui/material"
+
+import { Card as MuiCard } from "@mui/material"
+
+import trelloLogo from "~/assets/trello.svg"
+import { Box } from "@mui/material"
 function ChangePassword() {
     return (
         <form>
@@ -16,7 +25,7 @@ function ChangePassword() {
                         }}
                     >
                         <Avatar sx={{ bgcolor: 'primary.main' }}>
-                            <TrelloIcon />
+                            <img src={trelloLogo} alt="Trello" style={{ width: '70%', height: '70%' }} />
                         </Avatar>
                     </Box>
                     <Box
@@ -41,7 +50,7 @@ function ChangePassword() {
                                 variant="outlined"
                             />
                         </Box>
-                         <Box sx={{ marginTop: '1em' }}>
+                        <Box sx={{ marginTop: '1em' }}>
                             <TextField
                                 fullWidth
                                 label="Confirm Password..."
@@ -50,20 +59,20 @@ function ChangePassword() {
                             />
                         </Box>
                     </Box>
-                    <Link to="/login" style={{ textDecoration: 'none' }}>
+                    <Link to="/auth/login" style={{ textDecoration: 'none' }}>
 
-                    <CardActions sx={{ padding: '0 1em 1em 1em' }}>
-                        <Button
-                            className="interceptor-loading"
-                            type="submit"
-                            variant="contained"
-                            color="primary"
-                            size="large"
-                            fullWidth
-                        >
-                            Continue
-                        </Button>
-                    </CardActions>
+                        <CardActions sx={{ padding: '0 1em 1em 1em' }}>
+                            <Button
+                                className="interceptor-loading"
+                                type="submit"
+                                variant="contained"
+                                color="primary"
+                                size="large"
+                                fullWidth
+                            >
+                                Continue
+                            </Button>
+                        </CardActions>
                     </Link>
                 </MuiCard>
             </Zoom>
