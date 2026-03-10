@@ -5,6 +5,7 @@ import RegisterForm from '~/components/Auth/RegisterForm'
 import ForgotForm from '../../components/Auth/ForgotPassword'
 import ChangePassword from '../../components/Auth/ChangePassword'
 import CheckEmail from '../../components/Auth/CheckEmail'
+import bg from '../../assets/auth/login-register-bg.jpg'
 
 function Auth() {
   const location = useLocation()
@@ -21,7 +22,7 @@ function Auth() {
         minHeight: '100vh',
         alignItems: 'center',
         justifyContent: 'flex-start',
-        background: 'url("src/assets/auth/login-register-bg.jpg")',
+        background: `url(${bg})`,
         backgroundRepeat: 'no-repeat',
         backgroundSize: 'cover',
         backgroundPosition: 'center',
