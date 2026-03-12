@@ -4,8 +4,8 @@ import Divider from '@mui/material/Divider'
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import HomeIcon from '@mui/icons-material/Home'
-import LibraryAddIcon from '@mui/icons-material/LibraryAdd'
 import { Box, styled } from '@mui/material'
+import WorkspaceSidebarItem from './WorkspaceSidebarItem'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
   display: 'flex',
@@ -25,10 +25,9 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-function SideBar({ handler }) {
-  const { handleOpenCreateBoard } = handler
+function SideBar({ workspaces }) {
   return (
-    <Grid item xs={12} sm={3}>
+    <Grid item xs={12} sm={3} md={2}>
       <Stack direction="column" spacing={1}>
         <SidebarItem className="active">
           <SpaceDashboardIcon fontSize="small" />
@@ -45,10 +44,9 @@ function SideBar({ handler }) {
       </Stack>
       <Divider sx={{ my: 1 }} />
       <Stack direction="column" spacing={1}>
-        <SidebarItem onClick={handleOpenCreateBoard}>
-          <LibraryAddIcon fontSize="small" />
-          Create a new board
-        </SidebarItem>
+        {workspaces?.map((w) => (
+          <WorkspaceSidebarItem key={w._id} workspace={w} />
+        ))}
       </Stack>
     </Grid>
   )

@@ -4,7 +4,7 @@ import Avatar from '@mui/material/Avatar'
 import LockIcon from '@mui/icons-material/Lock'
 import Typography from '@mui/material/Typography'
 import { Card as MuiCard } from '@mui/material'
-import trelloLogo from "~/assets/trello.svg"
+import trelloLogo from '~/assets/trello.svg'
 import CardActions from '@mui/material/CardActions'
 import TextField from '@mui/material/TextField'
 import Zoom from '@mui/material/Zoom'
@@ -25,7 +25,11 @@ import { useDispatch } from 'react-redux'
 import Box from '@mui/material/Box'
 
 function LoginForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm()
+  const {
+    register,
+    handleSubmit,
+    formState: { errors }
+  } = useForm()
 
   let [searchParams] = useSearchParams()
 
@@ -43,7 +47,7 @@ function LoginForm() {
         pending: 'Logging in ...'
       })
       .then((res) => {
-        if (!res.error) navigate('/')
+        if (!res.error) navigate('/h')
       })
   }
 
@@ -63,7 +67,11 @@ function LoginForm() {
               <LockIcon />
             </Avatar>
             <Avatar sx={{ bgcolor: 'primary.main' }}>
-              <img src={trelloLogo} alt="Trello" style={{ width: '70%', height: '70%' }} />
+              <img
+                src={trelloLogo}
+                alt="Trello"
+                style={{ width: '70%', height: '70%' }}
+              />
             </Avatar>
           </Box>
           <Box
@@ -169,10 +177,23 @@ function LoginForm() {
           </CardActions>
           <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
             <Typography>New to Trello MERN Stack Advanced?</Typography>
-            <Typography sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'center', gap: 1 }}>
-              <Link to="/auth/reset-password" style={{ textDecoration: 'none' }}>
+            <Typography
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                justifyContent: 'center',
+                gap: 1
+              }}
+            >
+              <Link
+                to="/auth/reset-password"
+                style={{ textDecoration: 'none' }}
+              >
                 <Typography
-                  sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
+                  sx={{
+                    color: 'primary.main',
+                    '&:hover': { color: '#ffbb39' }
+                  }}
                 >
                   Can't log in?
                 </Typography>
@@ -180,7 +201,10 @@ function LoginForm() {
               <Typography>or</Typography>
               <Link to="/auth/register" style={{ textDecoration: 'none' }}>
                 <Typography
-                  sx={{ color: 'primary.main', '&:hover': { color: '#ffbb39' } }}
+                  sx={{
+                    color: 'primary.main',
+                    '&:hover': { color: '#ffbb39' }
+                  }}
                 >
                   Create account!
                 </Typography>

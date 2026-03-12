@@ -14,6 +14,7 @@ function Auth() {
   const isResetPassword = location.pathname === '/auth/reset-password'
   const isChangePassword = location.pathname === '/auth/change-password'
   const isCheckEmail = location.pathname === '/auth/check-email'
+
   return (
     <Box
       sx={{

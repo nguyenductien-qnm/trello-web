@@ -10,18 +10,24 @@ import Box from '@mui/material/Box'
 
 function BoardPage() {
   const { ui, data, handler } = useBoardList()
-  const { boards } = data.board
+  const { workspace } = data.workspace
 
   return (
     <>
-      {!boards && <PageLoadingSpinner caption="Loading Boards..." />}
-      {boards && (
+      {!workspace && <PageLoadingSpinner caption="Loading Boards..." />}
+      {workspace && (
         <Container disableGutters maxWidth={false}>
           <AppBar />
           <Box sx={{ paddingX: 2, my: 4 }}>
             <Grid container spacing={2}>
-              <SideBar ui={ui.sideBar} handler={handler.sideBar} />
-              <BoardList ui={ui.board} data={data.board} />
+              <SideBar
+                ui={ui.sideBar}
+                data={data.workspace}
+                handler={handler.sideBar}
+              />
+              {workspace?.map((w) => (
+                <BoardList key={w._id} ui={ui.board} data={w.boards} />
+              ))}
             </Grid>
           </Box>
           <CreateBoardModal ui={ui.createModal} handler={handler.createModal} />
