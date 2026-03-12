@@ -32,7 +32,7 @@ function AccountVerification() {
   }
 
   // Cuối cùng nếu không gặp vấn đề gì + với verify thành công thì điều hướng về trang login cùng giá trị verifiedEmail
-  return <Navigate to={`/login?verifiedEmail=${email}`} />
+  return <Navigate to={`/auth/login?verifiedEmail=${email}`} />
 }
 
 export default AccountVerification

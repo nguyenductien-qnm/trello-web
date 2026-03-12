@@ -125,6 +125,7 @@ function LoginForm() {
               <TextField
                 autoFocus
                 fullWidth
+                value={verifiedEmail || ''}
                 label="Enter Email..."
                 type="text"
                 variant="outlined"

@@ -113,3 +113,29 @@ export const inviteUserToBoardAPI = async (data) => {
   toast.success('User invited to board successfully!')
   return response.data
 }
+
+export const FogotPasswordAPI = async (data) => {
+  const response = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/users/forgot_password`,
+    data
+  )
+  toast.success('Recovery link sent successfully! Please check your email!')
+  return response.data
+}
+
+export const ChangePassWordAPI = async (data) => {
+  const response = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/users/change_password`,
+    data
+  )
+  toast.success('Password changed successfully!')
+  return response.data
+}
+
+export const verifyResetPasswordToken = async(data) => {
+  const response = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/users/verify_reset_password_token`,
+    data
+  )
+  return response.data
+}

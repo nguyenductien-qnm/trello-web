@@ -39,7 +39,7 @@ function RegisterForm() {
         pending: 'Registration is in progress...'
       })
       .then((user) => {
-        navigate(`/login?registeredEmail=${user.email}`)
+        navigate(`/auth/login?registeredEmail=${user.email}`)
       })
   }
 

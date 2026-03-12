@@ -1,16 +1,19 @@
-import { Link } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 
 import Avatar from '@mui/material/Avatar'
 import Typography from '@mui/material/Typography'
 import Zoom from '@mui/material/Zoom'
-
 import Card from '@mui/material/Card'
+import Box from '@mui/material/Box'
 
 import trelloLogo from '~/assets/trello.svg'
-import Box from '@mui/material/Box'
+
 function CheckEmail() {
+  const [searchParams] = useSearchParams()
+  const email = searchParams.get('email')
+
   return (
-    <form>
+    <Box component="form">
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
         <Card sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em' }}>
           <Box
@@ -29,6 +32,7 @@ function CheckEmail() {
               />
             </Avatar>
           </Box>
+
           <Box
             sx={{
               marginTop: '1em',
@@ -39,8 +43,9 @@ function CheckEmail() {
               color: (theme) => theme.palette.grey[500]
             }}
           >
-            Can't log in?
+            Check your email
           </Box>
+
           <Box
             sx={{
               backgroundImage:
@@ -53,69 +58,69 @@ function CheckEmail() {
             }}
           />
 
-          <Box sx={{ padding: '0 1em 1em 1em' }}>
-            <Typography variant="caption" sx={{ marginTop: '1em' }}>
+          <Box sx={{ padding: '0 1em 1em 1em', textAlign: 'center' }}>
+            <Typography variant="caption" component="div">
               We sent a recovery link to you at
             </Typography>
+
             <Typography
               sx={{
                 marginTop: '1em',
                 fontWeight: 'bold',
-                marginBottom: '0.5em'
+                marginBottom: '0.5em',
+                wordBreak: 'break-word'
               }}
             >
-              nguyentruongphuc.25022004@gmail.com
+              {email}
             </Typography>
-            <Typography variant="caption" sx={{ marginTop: '1rem' }}>
-              If you haven't received the email, check your spam folder or
+
+            <Typography variant="caption" component="div" sx={{ marginTop: '1rem' }}>
+              If you haven&apos;t received the email, check your spam folder or{' '}
               <Link to="/auth/register" style={{ textDecoration: 'none' }}>
-                <Typography
-                  variant="caption"
+                <Box
+                  component="span"
                   sx={{
                     color: 'primary.main',
-                    fontWeight: 'bold',
-                    marginLeft: '0.25em'
+                    fontWeight: 'bold'
                   }}
                 >
                   Sign up
-                </Typography>
+                </Box>
               </Link>
             </Typography>
           </Box>
-          <Box sx={{ marginBottom: '1.5em' }}>
-            <Typography
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                justifyContent: 'center',
-                gap: 1
-              }}
-            >
-              <Link to="/auth/login" style={{ textDecoration: 'none' }}>
-                <Typography
-                  component="span"
-                  sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                >
-                  Return to log in
-                </Typography>
-              </Link>
-              |
-              <Link
-                to="/auth/reset-password"
-                style={{ textDecoration: 'none' }}
+
+          <Box
+            sx={{
+              marginBottom: '1.5em',
+              display: 'flex',
+              justifyContent: 'center',
+              gap: 1
+            }}
+          >
+            <Link to="/auth/login" style={{ textDecoration: 'none' }}>
+              <Box
+                component="span"
+                sx={{ color: 'primary.main', fontWeight: 'bold' }}
               >
-                <Typography
-                  component="span"
-                  sx={{ color: 'primary.main', fontWeight: 'bold' }}
-                >
-                  Resend recovery link
-                </Typography>
-              </Link>
-            </Typography>
+                Return to log in
+              </Box>
+            </Link>
+
+            <Typography component="span">|</Typography>
+
+            <Link to="/auth/reset-password" style={{ textDecoration: 'none' }}>
+              <Box
+                component="span"
+                sx={{ color: 'primary.main', fontWeight: 'bold' }}
+              >
+                Resend recovery link
+              </Box>
+            </Link>
           </Box>
         </Card>
       </Zoom>
-    </form>
+    </Box>
   )
 }
 

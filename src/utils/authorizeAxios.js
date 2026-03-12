@@ -50,7 +50,6 @@ authorizeAxiosInstance.interceptors.response.use(
           .then((data) => {
             return data?.accessToken
           })
-
           .catch(() => {
             axiosReduxStore.dispatch(logoutUserApi(false))
             return Promise.reject(error)

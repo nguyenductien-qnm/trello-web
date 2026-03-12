@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
@@ -11,10 +11,28 @@ import Card from '@mui/material/Card'
 
 import trelloLogo from '~/assets/trello.svg'
 import Box from '@mui/material/Box'
+import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify'
+import { FogotPasswordAPI } from '~/apis'
 
 function ForgotForm() {
+
+  const { register, handleSubmit, formState: { errors } } = useForm()
+
+  const navigate = useNavigate()
+
+  const submitForgotPass = (data) => {
+      toast.promise(FogotPasswordAPI(data), {
+        pending: 'Sending recovery link...',
+        error: 'Failed to send recovery link. Please try again later.'
+      })
+      .then(() => {
+        navigate(`/auth/check-email?email=${data.email}`)
+      })
+  }
+
   return (
-    <form>
+    <form onSubmit={handleSubmit(submitForgotPass)}>
       <Zoom in={true} style={{ transitionDelay: '200ms' }}>
         <Card sx={{ minWidth: 380, maxWidth: 380, marginTop: '6em' }}>
           <Box
@@ -56,6 +74,10 @@ function ForgotForm() {
                 label="Enter email..."
                 type="email"
                 variant="outlined"
+                {...register('email', {
+                  required: 'Email is required',
+                  pattern: { value: /^\S+@\S+$/i, message: 'Invalid email address' }
+                })}
               />
             </Box>
           </Box>
@@ -69,7 +91,6 @@ function ForgotForm() {
               size="large"
               fullWidth
             >
-              {/* ANH EM XỬ LÝ GỬI MAIL SAU ĐÓ DIỀUD HƯỚNG SANG PAGE /auth/check-email  */}
               Send recovery link
             </Button>
           </CardActions>
