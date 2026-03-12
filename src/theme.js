@@ -68,7 +68,6 @@ const theme = extendTheme({
       }
     }
   }
-  // ...other properties
 })
 
 export default theme

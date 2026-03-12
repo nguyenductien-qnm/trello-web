@@ -1,9 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useLocation } from 'react-router-dom'
 import { createNewBoardsAPI, fetchBoardsAPI } from '~/apis'
+import { fetchBoardOverviewAPI } from '~/apis/board.api'
 
 const useBoardList = () => {
   const [boards, setBoards] = useState(null)
+  const [workspace, setWorkspace] = useState(null)
   const [totalBoards, setTotalBoards] = useState(null)
   const [isOpenCreateBoard, setIsOpenCreateBoard] = useState(false)
   const location = useLocation()
@@ -11,12 +13,12 @@ const useBoardList = () => {
   const page = parseInt(query.get('page') || '1', 10)
 
   const updateStateData = (res) => {
-    setBoards(res.boards || [])
-    setTotalBoards(res.totalBoards || 0)
+    setWorkspace(res)
+    // setTotalBoards(res.totalBoards || 0)
   }
 
   useEffect(() => {
-    fetchBoardsAPI(location.search).then(updateStateData)
+    fetchBoardOverviewAPI(location.search).then(updateStateData)
   }, [location.search])
 
   const handleOpenCreateBoard = () => setIsOpenCreateBoard(true)
@@ -38,7 +40,8 @@ const useBoardList = () => {
       }
     },
     data: {
-      board: { boards, totalBoards }
+      // board: { boards, totalBoards }
+      workspace: { workspace, totalBoards }
     },
     handler: {
       sideBar: {

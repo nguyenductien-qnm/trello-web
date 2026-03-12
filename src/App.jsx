@@ -7,6 +7,8 @@ import { useSelector } from 'react-redux'
 import { selectCurrentUser } from './redux/user/userSlice'
 import Settings from './pages/Settings/Settings'
 import BoardDetail from './pages/BoardDetail/BoardDetail.page'
+import HomeLayout from './layout/Home.layout'
+import WorkspaceBoardsPage from './pages/Home/WorkspaceBoards.page'
 /**
  * Giải pháp Clean Code trong việc xác định các route nào cần đăng nhập tài khoản xong thì mới cho truy cập
  * Sử dụng <Outlet /> của react-router-dom để hiển thị các Child Route (xem cách sử dụng trong App() bên dưới)
@@ -46,6 +48,27 @@ function App() {
 
         {/* Board list  */}
         <Route path="/boards" element={<BoardPage />} />
+        <Route path="/h" element={<HomeLayout />}>
+          <Route
+            path="workspaces/:workspaceId/boards"
+            element={<WorkspaceBoardsPage />}
+          />
+          {/* <Route index element={<Navigate to="boards" replace />} />
+          <Route path="boards" element={<BoardsOverviewPage />} />
+          
+          <Route
+            path="workspaces/:workspaceId/members"
+            element={<WorkspaceMembersPage />}
+          />
+          <Route
+            path="workspaces/:workspaceId/settings"
+            element={<WorkspaceSettingsPage />}
+          />
+          <Route
+            path="workspaces/:workspaceId/billing"
+            element={<WorkspaceBillingPage />}
+          /> */}
+        </Route>
 
         {/* user setting */}
         <Route path="/settings/account" element={<Settings />} />
