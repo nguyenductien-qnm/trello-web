@@ -18,6 +18,42 @@ export const fetchWorkspaceMemberAPI = async ({ _id, search }) => {
     `${API_ROOT}/v1/workspaces/members/${_id}`,
     { params: search ? { search } : {} }
   )
+  return response.data.metadata
+}
 
+export const fetchWorkspacePermissionAPI = async () => {
+  const response = await authorizeAxiosInstance.get(
+    `${API_ROOT}/v1/workspaces/permissions`
+  )
+  return response.data.metadata
+}
+
+export const fetchWorkspaceRoleAPI = async ({ _id }) => {
+  const response = await authorizeAxiosInstance.get(
+    `${API_ROOT}/v1/workspaces/roles/${_id}`
+  )
+  return response.data.metadata
+}
+
+export const createWorkspaceRoleAPI = async ({ payload }) => {
+  const response = await authorizeAxiosInstance.post(
+    `${API_ROOT}/v1/workspaces/roles`,
+    payload
+  )
+  return response.data.metadata
+}
+
+export const updateWorkspaceRoleAPI = async ({ payload }) => {
+  const response = await authorizeAxiosInstance.put(
+    `${API_ROOT}/v1/workspaces/roles`,
+    payload
+  )
+  return response.data.metadata
+}
+
+export const deleteWorkspaceRoleAPI = async ({ roleId }) => {
+  const response = await authorizeAxiosInstance.delete(
+    `${API_ROOT}/v1/workspaces/roles/${roleId}`
+  )
   return response.data.metadata
 }
