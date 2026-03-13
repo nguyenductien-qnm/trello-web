@@ -6,14 +6,18 @@ import CardContent from '@mui/material/CardContent'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import randomColor from 'randomcolor'
-import { Link } from 'react-router-dom'
+import { Link, useParams } from 'react-router-dom'
 import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
 import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined'
 import Box from '@mui/material/Box'
+import CreateBoardModal from './CreateBoardModal'
+import useBoardList from '~/hooks/board.hook'
 
-function BoardList({ ui, data }) {
-  const { page } = ui
-  const { boards, totalBoards } = data
+function BoardList() {
+  const { ui, data, handler } = useBoardList();
+
+  const { page } = ui.board;
+  const { boards, totalBoards } = data.board
 
   return (
     <Grid xs={12} sm={9} md={10}>
@@ -24,13 +28,11 @@ function BoardList({ ui, data }) {
         </Typography>
       </Box>
 
-      <Grid container spacing={2}>
+      <Grid container spacing={3}>
         {boards.map((b) => (
-          <Grid xs={12} sm={6} md={2.4} key={b._id}>
-            <Card sx={{ width: '280px' }}>
-              <Box
-                sx={{ height: '50px', backgroundColor: randomColor() }}
-              ></Box>
+          <Grid xs={12} sm={6} md={3} key={b._id}>
+            <Card sx={{ width: '100%', borderRadius: 2 }}>
+              <Box sx={{ height: '50px', backgroundColor: randomColor() }} />
 
               <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
                 <Typography gutterBottom variant="h6" component="div">
@@ -65,10 +67,12 @@ function BoardList({ ui, data }) {
             </Card>
           </Grid>
         ))}
-        <Grid xs={12} sm={6} md={2.4}>
+
+        <Grid xs={12} sm={6} md={3}>
           <Card
+            onClick={handler.sideBar.handleOpenCreateBoard}
             sx={{
-              width: 280,
+              width: '100%',
               height: 120,
               display: 'flex',
               alignItems: 'center',
@@ -94,6 +98,13 @@ function BoardList({ ui, data }) {
           </Card>
         </Grid>
       </Grid>
+      <CreateBoardModal
+        ui={{ isOpen: ui.createModal.isOpen }}
+        handler={{
+          handleClose: handler.createModal.handleClose,
+          handleCreateBoard: handler.createModal.handleCreateBoard
+        }}
+      />
 
       {totalBoards > 0 && (
         <Box
@@ -115,9 +126,8 @@ function BoardList({ ui, data }) {
             renderItem={(item) => (
               <PaginationItem
                 component={Link}
-                to={`/boards${
-                  item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
-                }`}
+                to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
+                  }`}
                 {...item}
               />
             )}

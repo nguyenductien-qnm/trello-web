@@ -133,7 +133,7 @@ function LoginForm() {
               <TextField
                 autoFocus
                 fullWidth
-                value={verifiedEmail || ''}
+                value={verifiedEmail}
                 label="Enter Email..."
                 type="text"
                 variant="outlined"
@@ -145,6 +145,7 @@ function LoginForm() {
               />
               <FieldErrorAlert errors={errors} fieldName={'email'} />
             </Box>
+
             <Box sx={{ marginTop: '1em' }}>
               <TextField
                 fullWidth
