@@ -6,12 +6,12 @@ import CardContent from '@mui/material/CardContent'
 import Pagination from '@mui/material/Pagination'
 import PaginationItem from '@mui/material/PaginationItem'
 import randomColor from 'randomcolor'
-import { Link, useParams } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
-import AssignmentIndOutlinedIcon from '@mui/icons-material/AssignmentIndOutlined'
 import Box from '@mui/material/Box'
 import CreateBoardModal from './CreateBoardModal'
 import useBoardList from '~/hooks/board.hook'
+import ViewKanbanOutlinedIcon from '@mui/icons-material/ViewKanbanOutlined'
 
 function BoardList() {
   const { ui, data, handler } = useBoardList();
@@ -20,11 +20,11 @@ function BoardList() {
   const { boards, totalBoards } = data.board
 
   return (
-    <Grid xs={12} sm={9} md={10}>
+    <>
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 1, mb: 3 }}>
-        <AssignmentIndOutlinedIcon fontSize="large" />
+        <ViewKanbanOutlinedIcon fontSize="large" />
         <Typography variant="h5" sx={{ fontWeight: 'bold' }}>
-          Your boards:
+          Your boards
         </Typography>
       </Box>
 
@@ -134,7 +134,7 @@ function BoardList() {
           />
         </Box>
       )}
-    </Grid>
+    </>
   )
 }
 export default BoardList

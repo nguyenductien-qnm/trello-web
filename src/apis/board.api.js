@@ -9,10 +9,9 @@ export const fetchBoardOverviewAPI = async (searchPath) => {
 }
 
 export const fetchBoardByWorkspaceIdAPI = async ({ workspaceId }) => {
-  console.log('ok ', workspaceId);
-  
   const response = await authorizeAxiosInstance.get(
     `${API_ROOT}/v1/boards/workspace/${workspaceId}`
   )
   return response.data.metadata
 }
+

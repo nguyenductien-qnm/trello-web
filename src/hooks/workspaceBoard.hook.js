@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import { fetchBoardByWorkspaceIdAPI } from '~/apis/board.api'
+// import { fetchBoardByWorkspaceIdAPI } from '~/apis/board.api'
 
 export const useWorkspaceBoards = () => {
   const [workspace, setWorkspace] = useState(null)
@@ -10,13 +10,13 @@ export const useWorkspaceBoards = () => {
   const { workspaceId } = useParams()
 
   useEffect(() => {
-    const fetchWorkspaceBoards = async () => {
-      const data = await fetchBoardByWorkspaceIdAPI({ workspaceId })
-      setWorkspace(data.workspace)
-      setBoards(data.boards)
-      setCount(data.count)
-    }
-    fetchWorkspaceBoards()
+    // const fetchWorkspaceBoards = async () => {
+    //   const data = await fetchBoardByWorkspaceIdAPI({ workspaceId })
+    //   setWorkspace(data.workspace)
+    //   setBoards(data.boards)
+    //   setCount(data.count)
+    // }
+    // fetchWorkspaceBoards()
   }, [workspaceId])
 
   return {
