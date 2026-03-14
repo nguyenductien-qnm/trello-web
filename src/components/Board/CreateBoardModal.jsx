@@ -16,9 +16,10 @@ import { Fade } from '@mui/material'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 
-const BOARD_TYPES = {
+const type = {
   PUBLIC: 'public',
-  PRIVATE: 'private'
+  PRIVATE: 'private',
+  WORKSPACE: 'workspace'
 }
 
 function CreateBoardModal({ ui, handler }) {
@@ -33,6 +34,7 @@ function CreateBoardModal({ ui, handler }) {
   const { handleClose, handleCreateBoard } = handler
 
   const { isOpen } = ui
+  
 
   useEffect(() => {
     reset()
@@ -58,7 +60,7 @@ function CreateBoardModal({ ui, handler }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width: 600,
+            width:400,
             bgcolor: 'white',
             boxShadow: 24,
             borderRadius: '8px',
@@ -70,6 +72,40 @@ function CreateBoardModal({ ui, handler }) {
           }}
         >
           <Box id="modal-modal-description" sx={{ my: 2 }}>
+            <Box
+              sx={{
+                width: 'auto',
+                height: 160,
+                borderRadius: 2,
+                overflow: 'hidden',
+                position: 'relative',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center'
+              }}
+            >
+              {/* Background image */}
+              <Box
+                component="img"
+                src="https://images.unsplash.com/photo-1742156345582-b857d994c84e?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&q=80&w=400"
+                sx={{
+                  width: 220,
+                  height: 140,
+                  objectFit: 'cover',
+                  borderRadius: 2
+                }}
+              />
+
+              {/* Overlay board preview */}
+              <Box
+                component="img"
+                src="https://trello.com/assets/14cda5dc635d1f13bc48.svg"
+                sx={{
+                  position: 'absolute',
+                  width: 200
+                }}
+              />
+            </Box>
             <form onSubmit={handleSubmit(handleCreateBoard)}>
               <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
                 <Box>
@@ -132,8 +168,8 @@ function CreateBoardModal({ ui, handler }) {
                 </Box>
 
                 <Controller
-                  name="type"
-                  defaultValue={BOARD_TYPES.PUBLIC}
+                  name="visibility"
+                  defaultValue={type.PUBLIC}
                   control={control}
                   render={({ field }) => (
                     <RadioGroup
@@ -143,15 +179,21 @@ function CreateBoardModal({ ui, handler }) {
                       value={field.value}
                     >
                       <FormControlLabel
-                        value={BOARD_TYPES.PUBLIC}
+                        value={type.PUBLIC}
                         control={<Radio size="small" />}
                         label="Public"
                         labelPlacement="start"
                       />
                       <FormControlLabel
-                        value={BOARD_TYPES.PRIVATE}
+                        value={type.PRIVATE}
                         control={<Radio size="small" />}
                         label="Private"
+                        labelPlacement="start"
+                      />
+                      <FormControlLabel
+                        value={type.WORKSPACE}
+                        control={<Radio size="small" />}
+                        label="Workspace"
                         labelPlacement="start"
                       />
                     </RadioGroup>
