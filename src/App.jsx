@@ -11,6 +11,7 @@ import HomeLayout from './layout/Home.layout'
 import WorkspaceBoardsPage from './pages/Home/WorkspaceBoards.page'
 import WorkspaceMemberPage from './pages/Home/WorkspaceMembers.page'
 import WorkspaceLayout from './layout/Workspace.layout'
+import WorkspaceSettingsPage from './pages/Home/WorkspaceSettings.page'
 /**
  * Giải pháp Clean Code trong việc xác định các route nào cần đăng nhập tài khoản xong thì mới cho truy cập
  * Sử dụng <Outlet /> của react-router-dom để hiển thị các Child Route (xem cách sử dụng trong App() bên dưới)
@@ -62,19 +63,16 @@ function App() {
               path=":workspaceId/members"
               element={<WorkspaceMemberPage />}
             />
+
+            <Route
+              path=":workspaceId/settings"
+              element={<WorkspaceSettingsPage />}
+            />
           </Route>
 
           {/* <Route index element={<Navigate to="boards" replace />} />
           <Route path="boards" element={<BoardsOverviewPage />} />
           
-          <Route
-            path="workspaces/:workspaceId/members"
-            element={<WorkspaceMembersPage />}
-          />
-          <Route
-            path="workspaces/:workspaceId/settings"
-            element={<WorkspaceSettingsPage />}
-          />
           <Route
             path="workspaces/:workspaceId/billing"
             element={<WorkspaceBillingPage />}
