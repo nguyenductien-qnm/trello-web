@@ -18,7 +18,16 @@ function BoardDetail() {
     <>
       {!board && <PageLoadingSpinner caption="Loading Board..." />}
       {board && (
-        <Container disableGutters maxWidth={false} sx={{ height: '100vh' }}>
+        <Container
+          disableGutters
+          maxWidth={false}
+          sx={{
+            height: '100vh',
+            width: '100%',
+            bgcolor: (theme) =>
+              theme.palette.mode === 'dark' ? '#34495e' : '#1976d2'
+          }}
+        >
           <AppBar />
           <CardDetailModal />
           <BoardBar board={board} />

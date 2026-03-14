@@ -34,10 +34,7 @@ function AppBar() {
       }}
     >
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-        <Link to="/">
-          <AppsIcon sx={{ color: 'white' }} />
-        </Link>
-        <Link to="/">
+        <Link to="/h">
           <Box sx={{ display: 'flex', alignItems: 'center', gap: 0.5 }}>
             <SvgIcon
               component={TrelloIcon}
@@ -53,24 +50,6 @@ function AppBar() {
             </Typography>
           </Box>
         </Link>
-
-        <Box sx={{ display: { xs: 'none', md: 'flex' }, gap: 1 }}>
-          <Workspaces />
-          <Recent />
-          <Starred />
-          <Templates />
-          <Button
-            sx={{
-              color: 'white',
-              border: 'none',
-              '&:hover': { border: 'none' }
-            }}
-            variant="outlined"
-            startIcon={<LibraryAddIcon />}
-          >
-            Create
-          </Button>
-        </Box>
       </Box>
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>

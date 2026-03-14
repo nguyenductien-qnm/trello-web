@@ -11,8 +11,7 @@ import Button from '@mui/material/Button'
 import Radio from '@mui/material/Radio'
 import RadioGroup from '@mui/material/RadioGroup'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { createNewBoardsAPI } from '~/apis'
-import { Fade } from '@mui/material'
+import Fade from '@mui/material/Fade'
 import Backdrop from '@mui/material/Backdrop'
 import Box from '@mui/material/Box'
 
@@ -34,7 +33,6 @@ function CreateBoardModal({ ui, handler }) {
   const { handleClose, handleCreateBoard } = handler
 
   const { isOpen } = ui
-  
 
   useEffect(() => {
     reset()
@@ -60,7 +58,7 @@ function CreateBoardModal({ ui, handler }) {
             top: '50%',
             left: '50%',
             transform: 'translate(-50%, -50%)',
-            width:400,
+            width: 400,
             bgcolor: 'white',
             boxShadow: 24,
             borderRadius: '8px',

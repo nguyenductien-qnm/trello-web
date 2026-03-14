@@ -3,11 +3,15 @@ import BoardList from '~/components/Board/BoardList'
 import { useWorkspaceBoards } from '~/hooks/workspaceBoard.hook'
 
 function WorkspaceBoardsPage() {
-  const { ui, data } = useWorkspaceBoards()
+  const { ui, data, handler } = useWorkspaceBoards()
 
   return (
     <Box sx={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
-      <BoardList ui={ui.boardList} data={data.boardList} />
+      <BoardList
+        ui={ui.boardList}
+        data={data.boardList}
+        handler={handler.boardList}
+      />
     </Box>
   )
 }

@@ -1,26 +1,50 @@
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-// import { fetchBoardByWorkspaceIdAPI } from '~/apis/board.api'
+import { createNewBoardsAPI } from '~/apis'
+import { fetchBoardByWorkspaceIdAPI } from '~/apis/board.api'
 
 export const useWorkspaceBoards = () => {
-  const [workspace, setWorkspace] = useState(null)
   const [boards, setBoards] = useState([])
   const [count, setCount] = useState(0)
+  const [isOpenCreateBoard, setIsOpenCreateBoard] = useState(false)
 
   const { workspaceId } = useParams()
 
   useEffect(() => {
-    // const fetchWorkspaceBoards = async () => {
-    //   const data = await fetchBoardByWorkspaceIdAPI({ workspaceId })
-    //   setWorkspace(data.workspace)
-    //   setBoards(data.boards)
-    //   setCount(data.count)
-    // }
-    // fetchWorkspaceBoards()
+    const fetchWorkspaceBoards = async () => {
+      const data = await fetchBoardByWorkspaceIdAPI({ workspaceId })
+      setBoards(data.boards)
+      setCount(data.count)
+    }
+
+    fetchWorkspaceBoards()
   }, [workspaceId])
 
+  const handleOpenCreateBoard = () => setIsOpenCreateBoard(true)
+  const handleCloseCreateBoard = () => setIsOpenCreateBoard(false)
+
+  const handleCreateBoard = async (data) => {
+    const payload = {
+      ...data,
+      workspaceId
+    }
+
+    const board = await createNewBoardsAPI(payload)
+    setBoards((prev) => [board, ...prev])
+    handleCloseCreateBoard()
+  }
+
   return {
-    ui: { boardList: { page: 1 } },
-    data: { workspace, boardList: { boards, count } }
+    ui: { boardList: { page: 1, createModal: { isOpen: isOpenCreateBoard } } },
+    data: { boardList: { boards, count } },
+    handler: {
+      boardList: {
+        handleOpenCreateBoard,
+        createModal: {
+          handleCreateBoard,
+          handleClose: handleCloseCreateBoard
+        }
+      }
+    }
   }
 }

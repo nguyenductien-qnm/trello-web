@@ -10,14 +10,12 @@ import { Link } from 'react-router-dom'
 import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
 import Box from '@mui/material/Box'
 import CreateBoardModal from './CreateBoardModal'
-import useBoardList from '~/hooks/board.hook'
 import ViewKanbanOutlinedIcon from '@mui/icons-material/ViewKanbanOutlined'
 
-function BoardList() {
-  const { ui, data, handler } = useBoardList();
-
-  const { page } = ui.board;
-  const { boards, totalBoards } = data.board
+function BoardList({ ui, data, handler }) {
+  const { page } = ui
+  const { boards, count } = data
+  const { handleOpenCreateBoard } = handler
 
   return (
     <>
@@ -29,7 +27,7 @@ function BoardList() {
       </Box>
 
       <Grid container spacing={3}>
-        {boards.map((b) => (
+        {boards?.map((b) => (
           <Grid xs={12} sm={6} md={3} key={b._id}>
             <Card sx={{ width: '100%', borderRadius: 2 }}>
               <Box sx={{ height: '50px', backgroundColor: randomColor() }} />
@@ -37,17 +35,6 @@ function BoardList() {
               <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
                 <Typography gutterBottom variant="h6" component="div">
                   {b.title}
-                </Typography>
-                <Typography
-                  variant="body2"
-                  color="text.secondary"
-                  sx={{
-                    overflow: 'hidden',
-                    whiteSpace: 'nowrap',
-                    textOverflow: 'ellipsis'
-                  }}
-                >
-                  {b.description}
                 </Typography>
                 <Box
                   component={Link}
@@ -70,10 +57,10 @@ function BoardList() {
 
         <Grid xs={12} sm={6} md={3}>
           <Card
-            onClick={handler.sideBar.handleOpenCreateBoard}
+            onClick={handleOpenCreateBoard}
             sx={{
               width: '100%',
-              height: 120,
+              height: 138,
               display: 'flex',
               alignItems: 'center',
               justifyContent: 'center',
@@ -98,15 +85,9 @@ function BoardList() {
           </Card>
         </Grid>
       </Grid>
-      <CreateBoardModal
-        ui={{ isOpen: ui.createModal.isOpen }}
-        handler={{
-          handleClose: handler.createModal.handleClose,
-          handleCreateBoard: handler.createModal.handleCreateBoard
-        }}
-      />
+      <CreateBoardModal ui={ui.createModal} handler={handler.createModal} />
 
-      {totalBoards > 0 && (
+      {count > 0 && (
         <Box
           sx={{
             my: 3,
@@ -121,13 +102,14 @@ function BoardList() {
             color="secondary"
             showFirstButton
             showLastButton
-            count={Math.ceil(totalBoards / DEFAULT_ITEMS_PER_PAGE)}
+            count={Math.ceil(count / DEFAULT_ITEMS_PER_PAGE)}
             page={page}
             renderItem={(item) => (
               <PaginationItem
                 component={Link}
-                to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
-                  }`}
+                to={`/boards${
+                  item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
+                }`}
                 {...item}
               />
             )}
