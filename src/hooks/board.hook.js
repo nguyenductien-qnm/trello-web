@@ -20,8 +20,8 @@ const useBoardList = () => {
   }
 
   useEffect(() => {
-    console.log(location);
-    
+    console.log(location)
+
     fetchBoardOverviewAPI(location.search).then(updateStateData)
   }, [location.search])
 
@@ -33,11 +33,13 @@ const useBoardList = () => {
       ...data,
       workspaceId
     }
-    
+
     const board = await createNewBoardsAPI(payload)
     setBoards((prev) => [board, ...prev])
     handleCloseCreateBoard()
   }
+
+  console.log('okk')
 
   return {
     ui: {

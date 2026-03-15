@@ -1,20 +1,18 @@
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams } from 'react-router-dom'
-import { fetchWorkspaceInfoAPI, updateWorkspaceAPI } from '~/apis/workspace.api'
+import { updateWorkspaceAPI } from '~/redux/workspace/workspacesSlice'
 
 export const useWorkspaceLayout = () => {
+  const dispatch = useDispatch()
   const { workspaceId } = useParams()
-  const [workspace, setWorkspace] = useState(null)
-  const [openUpdateModal, setOpenUpdateModal] = useState(false)
-  const [isSubmitting, setIsSubmitting] = useState(false)
+  const workspace = useSelector((state) =>
+    state?.workspaces?.find((w) => w._id === workspaceId)
+  )
 
-  useEffect(() => {
-    const fetchWorkspaceBoards = async () => {
-      const data = await fetchWorkspaceInfoAPI({ _id: workspaceId })
-      setWorkspace(data)
-    }
-    fetchWorkspaceBoards()
-  }, [workspaceId])
+  const [openUpdateModal, setOpenUpdateModal] = useState(false)
+
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const handleOpenUpdateModal = () => setOpenUpdateModal(true)
 
@@ -23,11 +21,12 @@ export const useWorkspaceLayout = () => {
   const handleUpdateWorkspace = async (data) => {
     setIsSubmitting(true)
     try {
-      const updatedWorkspace = await updateWorkspaceAPI({
-        _id: workspaceId,
-        payload: data
-      })
-      setWorkspace(updatedWorkspace)
+      await dispatch(
+        updateWorkspaceAPI({
+          _id: workspaceId,
+          payload: data
+        })
+      )
     } catch {
       throw new Error()
     } finally {

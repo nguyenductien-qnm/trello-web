@@ -5,13 +5,15 @@ import {
   fetchWorkspacePermissionAPI,
   createWorkspaceRoleAPI,
   updateWorkspaceRoleAPI,
-  deleteWorkspaceRoleAPI,
-  deleteWorkspaceAPI
+  deleteWorkspaceRoleAPI
 } from '~/apis/workspace.api'
+import { deleteWorkspaceAPI } from '~/redux/workspace/workspacesSlice'
 import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
 export const useWorkspaceSetting = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const { workspaceId } = useParams()
   const [openCreateModal, setOpenCreateModal] = useState(false)
@@ -122,7 +124,7 @@ export const useWorkspaceSetting = () => {
   const handleDeleteWorkspace = async () => {
     setIsDeletingWorkspace(true)
     try {
-      await deleteWorkspaceAPI({ _id: workspaceId })
+      await dispatch(deleteWorkspaceAPI({ _id: workspaceId }))
       navigate('/h')
     } catch {
       throw new Error()

@@ -12,7 +12,7 @@ import CloseIcon from '@mui/icons-material/Close'
 import Box from '@mui/material/Box'
 import AbcIcon from '@mui/icons-material/Abc'
 import DescriptionOutlinedIcon from '@mui/icons-material/DescriptionOutlined'
-import { useUpdateWorkspaceForm } from '~/hooks/workspaceForm.hook'
+import { useUpdateWorkspaceForm } from '~/hooks/updateWorkspaceForm.hook'
 import { InputAdornment } from '@mui/material'
 
 function UpdateWorkspaceModal({ data, loading, isOpen, onClose, onSubmit }) {

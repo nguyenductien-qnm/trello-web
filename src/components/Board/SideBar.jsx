@@ -4,7 +4,9 @@ import Divider from '@mui/material/Divider'
 import SpaceDashboardIcon from '@mui/icons-material/SpaceDashboard'
 import ListAltIcon from '@mui/icons-material/ListAlt'
 import HomeIcon from '@mui/icons-material/Home'
-import { Box, styled } from '@mui/material'
+import AddIcon from '@mui/icons-material/Add'
+import Box from '@mui/material/Box'
+import { styled } from '@mui/material'
 import WorkspaceSidebarItem from './WorkspaceSidebarItem'
 
 const SidebarItem = styled(Box)(({ theme }) => ({
@@ -25,7 +27,7 @@ const SidebarItem = styled(Box)(({ theme }) => ({
   }
 }))
 
-function SideBar({ workspaces }) {
+function SideBar({ workspaces, handleOpenCreateWorkspaceModal }) {
   return (
     <Grid item xs={12} sm={3} md={2}>
       <Stack direction="column" spacing={1}>
@@ -44,6 +46,15 @@ function SideBar({ workspaces }) {
       </Stack>
       <Divider sx={{ my: 1 }} />
       <Stack direction="column" spacing={1}>
+        {workspaces.length == 0 && (
+          <SidebarItem
+            onClick={handleOpenCreateWorkspaceModal}
+            sx={{ color: 'text.secondary', fontSize: '15px' }}
+          >
+            <AddIcon fontSize="small" />
+            Create Workspace
+          </SidebarItem>
+        )}
         {workspaces?.map((w) => (
           <WorkspaceSidebarItem key={w._id} workspace={w} />
         ))}

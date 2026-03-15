@@ -1,17 +1,47 @@
 import { useEffect, useState } from 'react'
-import { fetchWorkspaceByUserAPI } from '~/apis/workspace.api'
+import { useDispatch, useSelector } from 'react-redux'
+import {
+  fetchWorkspacesAPI,
+  createWorkspaceAPI
+} from '~/redux/workspace/workspacesSlice'
 
 export const useHomeLayout = () => {
-  const [workspaces, setWorkspaces] = useState([])
+  const dispatch = useDispatch()
+  const workspaces = useSelector((state) => state.workspaces)
+  const [isCreating, setIsCreating] = useState(false)
+  const [isOpenCreateWorkspaceModal, setIsOpenCreateWorkspaceModal] =
+    useState(false)
 
   useEffect(() => {
-    const fetWorkspaces = async () => {
-      const data = await fetchWorkspaceByUserAPI()
-      setWorkspaces(data)
+    dispatch(fetchWorkspacesAPI())
+  }, [dispatch])
+
+  const handleOpenCreateWorkspaceModal = () =>
+    setIsOpenCreateWorkspaceModal(true)
+
+  const handleCloseCreateWorkspaceModal = () =>
+    setIsOpenCreateWorkspaceModal(false)
+
+  const handleCreateWorkspace = async (data) => {
+    setIsCreating(true)
+    try {
+      dispatch(createWorkspaceAPI({ payload: data }))
+    } catch {
+      throw new Error()
+    } finally {
+      setIsCreating(false)
+      handleCloseCreateWorkspaceModal()
     }
+  }
 
-    fetWorkspaces()
-  }, [])
-
-  return { workspaces }
+  return {
+    workspaces,
+    handleOpenCreateWorkspaceModal,
+    createModal: {
+      isOpen: isOpenCreateWorkspaceModal,
+      loading: isCreating,
+      onClose: handleCloseCreateWorkspaceModal,
+      onSubmit: handleCreateWorkspace
+    }
+  }
 }
