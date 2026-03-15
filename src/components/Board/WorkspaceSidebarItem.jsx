@@ -1,7 +1,18 @@
 import { useEffect, useMemo, useState } from 'react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { Collapse, List, ListItemButton, ListItemText } from '@mui/material'
-import { ExpandLess, ExpandMore } from '@mui/icons-material'
+import Collapse from '@mui/material/Collapse'
+import List from '@mui/material/List'
+import ListItemButton from '@mui/material/ListItemButton'
+import ListItemIcon from '@mui/material/ListItemIcon'
+import ListItemText from '@mui/material/ListItemText'
+import Avatar from '@mui/material/Avatar'
+import ExpandLess from '@mui/icons-material/ExpandLess'
+import ExpandMore from '@mui/icons-material/ExpandMore'
+import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined'
+import GroupOutlinedIcon from '@mui/icons-material/GroupOutlined'
+import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined'
+import ReceiptLongOutlinedIcon from '@mui/icons-material/ReceiptLongOutlined'
+import randomColor from 'randomcolor'
 
 function WorkspaceSidebarItem({ workspace }) {
   const [open, setOpen] = useState(false)
@@ -17,8 +28,38 @@ function WorkspaceSidebarItem({ workspace }) {
     [workspace._id]
   )
 
-  const isWorkspaceActive = Object.values(routes).some((path) =>
-    location.pathname.startsWith(path)
+  const sidebarItems = useMemo(
+    () => [
+      {
+        key: 'boards',
+        label: 'Boards',
+        to: routes.boards,
+        icon: <DashboardOutlinedIcon fontSize="small" />
+      },
+      {
+        key: 'members',
+        label: 'Members',
+        to: routes.members,
+        icon: <GroupOutlinedIcon fontSize="small" />
+      },
+      {
+        key: 'settings',
+        label: 'Settings',
+        to: routes.settings,
+        icon: <SettingsOutlinedIcon fontSize="small" />
+      },
+      {
+        key: 'billing',
+        label: 'Billing',
+        to: routes.billing,
+        icon: <ReceiptLongOutlinedIcon fontSize="small" />
+      }
+    ],
+    [routes]
+  )
+
+  const isWorkspaceActive = sidebarItems.some((item) =>
+    location.pathname.startsWith(item.to)
   )
 
   const isActive = (path) => location.pathname.startsWith(path)
@@ -33,6 +74,18 @@ function WorkspaceSidebarItem({ workspace }) {
     setOpen((prev) => !prev)
   }
 
+  const getSubItemSx = (active) => ({
+    pl: 4,
+    borderRadius: 2,
+    mx: 1,
+    mb: 0.5,
+    bgcolor: active ? 'rgba(25, 118, 210, 0.08)' : 'transparent',
+    color: active ? 'primary.main' : 'text.primary',
+    '&:hover': {
+      bgcolor: active ? 'rgba(25, 118, 210, 0.12)' : 'action.hover'
+    }
+  })
+
   return (
     <>
       <ListItemButton
@@ -40,107 +93,58 @@ function WorkspaceSidebarItem({ workspace }) {
         sx={{
           borderRadius: 2,
           mb: 0.5,
+
           bgcolor: isWorkspaceActive ? 'action.selected' : 'transparent',
           '&:hover': {
             bgcolor: isWorkspaceActive ? 'action.selected' : 'action.hover'
           }
         }}
       >
+        <ListItemIcon sx={{ minWidth: 44 }}>
+          <Avatar
+            sx={{
+              width: 28,
+              height: 28,
+              fontSize: 14,
+              fontWeight: 700,
+              borderRadius: 1.5,
+              bgcolor: randomColor(),
+              color: '#fff'
+            }}
+          >
+            {workspace?.title?.charAt(0)?.toUpperCase()}
+          </Avatar>
+        </ListItemIcon>
+
         <ListItemText primary={workspace.title} />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItemButton>
 
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItemButton
-            component={RouterLink}
-            to={routes.boards}
-            sx={{
-              pl: 4,
-              borderRadius: 2,
-              mx: 1,
-              mb: 0.5,
-              bgcolor: isActive(routes.boards)
-                ? 'rgba(25, 118, 210, 0.08)'
-                : 'transparent',
-              color: isActive(routes.boards) ? 'primary.main' : 'text.primary',
-              '&:hover': {
-                bgcolor: isActive(routes.boards)
-                  ? 'rgba(25, 118, 210, 0.12)'
-                  : 'action.hover'
-              }
-            }}
-          >
-            <ListItemText primary="Boards" />
-          </ListItemButton>
+          {sidebarItems.map((item) => {
+            const active = isActive(item.to)
 
-          <ListItemButton
-            component={RouterLink}
-            to={routes.members}
-            sx={{
-              pl: 4,
-              borderRadius: 2,
-              mx: 1,
-              mb: 0.5,
-              bgcolor: isActive(routes.members)
-                ? 'rgba(25, 118, 210, 0.08)'
-                : 'transparent',
-              color: isActive(routes.members) ? 'primary.main' : 'text.primary',
-              '&:hover': {
-                bgcolor: isActive(routes.members)
-                  ? 'rgba(25, 118, 210, 0.12)'
-                  : 'action.hover'
-              }
-            }}
-          >
-            <ListItemText primary="Members" />
-          </ListItemButton>
+            return (
+              <ListItemButton
+                key={item.key}
+                component={RouterLink}
+                to={item.to}
+                sx={getSubItemSx(active)}
+              >
+                <ListItemIcon
+                  sx={{
+                    minWidth: 36,
+                    color: 'inherit'
+                  }}
+                >
+                  {item.icon}
+                </ListItemIcon>
 
-          <ListItemButton
-            component={RouterLink}
-            to={routes.settings}
-            sx={{
-              pl: 4,
-              borderRadius: 2,
-              mx: 1,
-              mb: 0.5,
-              bgcolor: isActive(routes.settings)
-                ? 'rgba(25, 118, 210, 0.08)'
-                : 'transparent',
-              color: isActive(routes.settings)
-                ? 'primary.main'
-                : 'text.primary',
-              '&:hover': {
-                bgcolor: isActive(routes.settings)
-                  ? 'rgba(25, 118, 210, 0.12)'
-                  : 'action.hover'
-              }
-            }}
-          >
-            <ListItemText primary="Setting" />
-          </ListItemButton>
-
-          <ListItemButton
-            component={RouterLink}
-            to={routes.billing}
-            sx={{
-              pl: 4,
-              borderRadius: 2,
-              mx: 1,
-              mb: 0.5,
-              bgcolor: isActive(routes.billing)
-                ? 'rgba(25, 118, 210, 0.08)'
-                : 'transparent',
-              color: isActive(routes.billing) ? 'primary.main' : 'text.primary',
-              '&:hover': {
-                bgcolor: isActive(routes.billing)
-                  ? 'rgba(25, 118, 210, 0.12)'
-                  : 'action.hover'
-              }
-            }}
-          >
-            <ListItemText primary="Billing" />
-          </ListItemButton>
+                <ListItemText primary={item.label} />
+              </ListItemButton>
+            )
+          })}
         </List>
       </Collapse>
     </>

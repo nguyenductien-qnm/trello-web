@@ -5,19 +5,24 @@ import {
   fetchWorkspacePermissionAPI,
   createWorkspaceRoleAPI,
   updateWorkspaceRoleAPI,
-  deleteWorkspaceRoleAPI
+  deleteWorkspaceRoleAPI,
+  deleteWorkspaceAPI
 } from '~/apis/workspace.api'
+import { useNavigate } from 'react-router-dom'
 
 export const useWorkspaceSetting = () => {
+  const navigate = useNavigate()
+
+  const { workspaceId } = useParams()
   const [openCreateModal, setOpenCreateModal] = useState(false)
   const [openConfirmDialog, setOpenConfirmDialog] = useState(false)
   const [deleteRoleId, setDeleteRoleId] = useState(null)
   const [permissions, setPermissions] = useState([])
   const [roles, setRoles] = useState([])
-  const { workspaceId } = useParams()
   const [isUpdating, setIsUpdating] = useState(false)
   const [isCreating, setIsCreating] = useState(false)
   const [isDeleting, setIsDeleting] = useState(false)
+  const [isDeletingWorkspace, setIsDeletingWorkspace] = useState(false)
 
   useEffect(() => {
     const fetchWorkspaceRole = async () => {
@@ -114,9 +119,22 @@ export const useWorkspaceSetting = () => {
     setOpenConfirmDialog(false)
   }
 
+  const handleDeleteWorkspace = async () => {
+    setIsDeletingWorkspace(true)
+    try {
+      await deleteWorkspaceAPI({ _id: workspaceId })
+      navigate('/h')
+    } catch {
+      throw new Error()
+    } finally {
+      setIsDeletingWorkspace(false)
+    }
+  }
+
   return {
     ui: {
       isUpdating,
+      isDeletingWorkspace,
       createModal: {
         open: openCreateModal,
         isSubmitting: isCreating
@@ -151,6 +169,7 @@ export const useWorkspaceSetting = () => {
         onClose: handleCloseConfirmDialog
       },
       handleOpenCreateModal,
+      handleDeleteWorkspace,
       handleUpdateRole
     }
   }

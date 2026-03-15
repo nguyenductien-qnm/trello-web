@@ -16,7 +16,7 @@ import IconButton from '@mui/material/IconButton'
 import CloseIcon from '@mui/icons-material/Close'
 import Box from '@mui/material/Box'
 import { groupPermission } from '~/helpers/groupPermission'
-import { useCreateWorkspaceRoleForm } from '~/hooks/workspaceForm.hook'
+import { useCreateWorkspaceRoleForm } from '~/hooks/workspaceRoleForm.hook'
 
 function CreateWorkspaceRoleModal({ ui, data, handler }) {
   const { open, isSubmitting } = ui

@@ -10,14 +10,17 @@ import WorkspaceRoleCard from '~/components/Workspace/WorkspaceRoleCard'
 import CreateWorkspaceRoleModal from '~/components/Workspace/CreateWorkspaceRoleModal'
 import ConfirmDialog from '~/components/Common/ConfirmDialog'
 import { useWorkspaceSetting } from '~/hooks/workspaceSetting.hook'
+import PopperDeleteWorkspace from '~/components/Workspace/PopperDeleteWorkspace'
+import { useOutletContext } from 'react-router-dom'
 
 function WorkspaceSettingsPage() {
   const { ui, data, handler } = useWorkspaceSetting()
-
-  const { isUpdating } = ui
+  const { isUpdating, isDeletingWorkspace } = ui
   const { roles } = data
-  const { handleOpenCreateModal, handleUpdateRole } = handler
+  const { handleOpenCreateModal, handleUpdateRole, handleDeleteWorkspace } =
+    handler
 
+  const { workspace } = useOutletContext()
   return (
     <>
       <Box
@@ -106,6 +109,12 @@ function WorkspaceSettingsPage() {
           />
         ))}
       </Stack>
+
+      <PopperDeleteWorkspace
+        isDeleting={isDeletingWorkspace}
+        workspace={workspace}
+        handleDeleteWorkspace={handleDeleteWorkspace}
+      />
 
       <CreateWorkspaceRoleModal
         ui={ui.createModal}
