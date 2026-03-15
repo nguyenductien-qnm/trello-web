@@ -31,6 +31,7 @@ const UnauthorizedRoute = ({ user }) => {
 
 function App() {
   const currentUser = useSelector(selectCurrentUser)
+  
   return (
     <Routes>
       <Route

@@ -20,9 +20,7 @@ const useBoardList = () => {
   }
 
   useEffect(() => {
-    console.log(location);
-    
-    fetchBoardOverviewAPI(location.search).then(updateStateData)
+    (location.search).then(updateStateData)
   }, [location.search])
 
   const handleOpenCreateBoard = () => setIsOpenCreateBoard(true)

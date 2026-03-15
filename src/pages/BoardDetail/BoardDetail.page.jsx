@@ -11,7 +11,7 @@ function BoardDetail() {
     board,
     moveColumns,
     moveCardInTheSameColumn,
-    moveCardToDifferentColumn
+    moveCardToDifferentColumn, boardModal
   } = useBoardDetail()
 
   return (
@@ -30,7 +30,7 @@ function BoardDetail() {
         >
           <AppBar />
           <CardDetailModal />
-          <BoardBar board={board} />
+          <BoardBar board={board} boardModal={ boardModal } />
           <BoardContent
             board={board}
             moveColumns={moveColumns}

@@ -90,11 +90,7 @@ const useBoardDetail = () => {
     moveColumns,
     moveCardInTheSameColumn,
     moveCardToDifferentColumn,
-    boardModal: {
-      open,
-      handleClose,
-      handleOpen
-    }
+    handleClose, handleOpen, open
   }
 }
 export default useBoardDetail

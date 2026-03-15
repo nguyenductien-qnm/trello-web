@@ -11,6 +11,8 @@ import { DEFAULT_PAGE, DEFAULT_ITEMS_PER_PAGE } from '~/utils/constants'
 import Box from '@mui/material/Box'
 import CreateBoardModal from './CreateBoardModal'
 import ViewKanbanOutlinedIcon from '@mui/icons-material/ViewKanbanOutlined'
+import { Divider } from '@mui/material'
+import ArchivedBoardList from './ArchivedBoardModal'
 
 function BoardList({ ui, data, handler }) {
   const { page } = ui
@@ -27,33 +29,35 @@ function BoardList({ ui, data, handler }) {
       </Box>
 
       <Grid container spacing={3}>
-        {boards?.map((b) => (
-          <Grid xs={12} sm={6} md={3} key={b._id}>
-            <Card sx={{ width: '100%', borderRadius: 2 }}>
-              <Box sx={{ height: '50px', backgroundColor: randomColor() }} />
+        {boards
+          ?.filter((b) => b.status !== 'archived')
+          .map((b) => (
+            <Grid xs={12} sm={6} md={3} key={b._id}>
+              <Card sx={{ width: '100%', borderRadius: 2 }}>
+                <Box sx={{ height: '50px', backgroundColor: randomColor() }} />
 
-              <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
-                <Typography gutterBottom variant="h6" component="div">
-                  {b.title}
-                </Typography>
-                <Box
-                  component={Link}
-                  to={`/boards/${b._id}`}
-                  sx={{
-                    mt: 1,
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'flex-end',
-                    color: 'primary.main',
-                    '&:hover': { color: 'primary.light' }
-                  }}
-                >
-                  Go to board <ArrowRightIcon fontSize="small" />
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
+                <CardContent sx={{ p: 1.5, '&:last-child': { p: 1.5 } }}>
+                  <Typography gutterBottom variant="h6" component="div">
+                    {b.title}
+                  </Typography>
+                  <Box
+                    component={Link}
+                    to={`/boards/${b._id}`}
+                    sx={{
+                      mt: 1,
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'flex-end',
+                      color: 'primary.main',
+                      '&:hover': { color: 'primary.light' }
+                    }}
+                  >
+                    Go to board <ArrowRightIcon fontSize="small" />
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
 
         <Grid xs={12} sm={6} md={3}>
           <Card
@@ -107,15 +111,18 @@ function BoardList({ ui, data, handler }) {
             renderItem={(item) => (
               <PaginationItem
                 component={Link}
-                to={`/boards${
-                  item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
-                }`}
+                to={`/boards${item.page === DEFAULT_PAGE ? '' : `?page=${item.page}`
+                  }`}
                 {...item}
               />
             )}
           />
         </Box>
       )}
+      <Box sx={{ mt: 4 }}>
+        <Divider sx={{marginBottom: '10px'}}/>
+        <ArchivedBoardList />
+      </Box>
     </>
   )
 }

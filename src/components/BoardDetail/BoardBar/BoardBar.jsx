@@ -5,6 +5,9 @@ import BoardUserGroup from './BoardUserGroup'
 import InviteBoardUser from './InviteBoardUser'
 import Box from '@mui/material/Box'
 import { alpha } from '@mui/material/styles'
+import BoardModal from '../BoardModal/BoardModal'
+import { Button, IconButton } from '@mui/material'
+import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 const MENU_STYLES = {
   color: 'white',
   bgcolor: 'transparent',
@@ -19,7 +22,8 @@ const MENU_STYLES = {
   }
 }
 
-function BoardBar({ board }) {
+function BoardBar({ board, boardModal }) {
+  const { handleOpen } = boardModal;
   return (
     <Box
       sx={{
@@ -51,6 +55,10 @@ function BoardBar({ board }) {
 
       <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
         <InviteBoardUser boardId={board._id} />
+        <IconButton onClick={handleOpen} sx={{ fontSize: '20px', alignContent: 'center', color:'white' }}>
+          <MoreHorizIcon />
+        </IconButton>
+        <BoardModal boardModal={boardModal} />
         <BoardUserGroup boardUsers={board.FE_allUsers} />
       </Box>
     </Box>
